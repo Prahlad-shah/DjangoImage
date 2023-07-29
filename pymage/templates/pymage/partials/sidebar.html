@@ -21,10 +21,24 @@
       </li>
 
       <!-- Nav Item - Seek -->
+      <li class="nav-item {{ searchActive }}">
+        <a class="nav-link" href="{% url 'search' %}">
+          <i class="fas fa-fw fa-search"></i>
+          <span>Image Search</span></a>
+      </li>
+
+      {% comment %} <!-- Nav Item - Seek -->
       <li class="nav-item {{ seekActive }}">
         <a class="nav-link" href="{% url 'seek' %}">
           <i class="fas fa-fw fa-search"></i>
           <span>Seek</span></a>
+      </li> {% endcomment %}
+
+      <!-- Nav Item - Seek -->
+      <li class="nav-item {{ performanceActive }}">
+        <a class="nav-link" href="{% url 'seek' %}">
+          <i class="fas fa-fw fa-search"></i>
+          <span>Performance</span></a>
       </li>
 
       <!-- Nav Item - Rotate -->

@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pymage',
+    'pymage.apps.PymageConfig',
 ]
 
 MIDDLEWARE = [
@@ -51,11 +51,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'djangoproject.urls'
-
+TEMPLATES_DIR_PYIMG = os.path.join(BASE_DIR, 'pymage/templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [TEMPLATES_DIR_PYIMG,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -107,7 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Jakarta'
+TIME_ZONE = 'Asia/Nepal'
 
 USE_I18N = True
 
@@ -118,9 +118,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+from pathlib import Path
+BASE_DIR_PATH = Path(__file__).resolve().parent.parent
+# STATIC_ROOT = Path.joinpath(BASE_DIR_PATH, "static/")
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = (Path.joinpath(BASE_DIR_PATH, 'static/'),)
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = '/media/'
+
+
+print('Base Directory = =>',BASE_DIR)
+print('Media Directory = =>',MEDIA_ROOT)
+print('Medai Url Directory = =>',MEDIA_URL)
+print('Static  Directory = =>',STATICFILES_DIRS)

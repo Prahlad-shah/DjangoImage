@@ -12,6 +12,7 @@ import pickle
 import csv
 import pandas
 from pymage.cari_ciri import PencariCiri
+from django.conf import settings
 
 fe = PencariCiri()
 features = []
@@ -22,36 +23,153 @@ for feature_path in glob.glob("/srv/http/djangoproject/media/ciri/*"):
 
 class Home(TemplateView):
 	template_name = 'index.html'
+	# template_name = 'indextest.html'
 
-def index(request):
+# def index(request):
+# 	indexActive = 'active'
+# 	pageTitle = 'Greyscale'
+# 	pageStatus = 1
+# 	if request.method == 'POST':
+# 		uploaded_file = request.FILES['imagefile']
+# 		pageStatus = 2
+# 		fs = FileSystemStorage()
+# 		name = fs.save(uploaded_file.name, uploaded_file)
+# 		url = fs.url(name)
+# 		displayFile = url
+# 		# tujuan = "/srv/http/djangoproject" + url
+# 		tujuan = settings.BASE_DIR + url
+# 		gambarGreyscale = Image.open(tujuan)
+# 		namafilebaru = tujuan[:-4] + "_greyscale" + tujuan[-4:]
+# 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI convert()
+# 		filebaru = gambarGreyscale.convert(mode='L').save(namafilebaru)
+# 		displayFileMod = url[:-4] + "_greyscale" + url[-4:]
+# 		return render(request, 'pymage/index.html', {
+# 			'pageStatus':pageStatus,
+# 			'displayFileMod':displayFileMod,
+# 			'pageTitle':pageTitle,
+# 			'indexActive':indexActive,
+# 			'displayFile':displayFile
+# 			})
+# 	return render(request, 'pymage/index.html', {
+# 		'pageStatus':pageStatus,
+# 		'pageTitle':pageTitle,
+# 		'indexActive':indexActive
+# 		})
+
+from pathlib import Path
+from datetime import datetime
+from io import BytesIO
+from django.conf import settings
+from subscriptable_path import Path as s_path
+def indexTest(request):
 	indexActive = 'active'
 	pageTitle = 'Greyscale'
 	pageStatus = 1
+	upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
 	if request.method == 'POST':
 		uploaded_file = request.FILES['imagefile']
 		pageStatus = 2
-		fs = FileSystemStorage()
-		name = fs.save(uploaded_file.name, uploaded_file)
-		url = fs.url(name)
-		displayFile = url
-		tujuan = "/srv/http/djangoproject" + url
-		gambarGreyscale = Image.open(tujuan)
-		namafilebaru = tujuan[:-4] + "_greyscale" + tujuan[-4:]
+		# Save query image
+		buffer = BytesIO()
+		buffer.write(uploaded_file.read())
+		buffer.seek(0)
+		img = Image.open(buffer)  # PIL image
+		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+		img.save(uploaded_img_path_url)
+		
+		path = uploaded_img_path_url #FULL PATH
+		start = settings.BASE_DIR
+		relative_path = os.path.relpath(path, start)
+
+		gambarGreyscale = img
+		tujuan = s_path(uploaded_img_path_url)
+		namafilebaru = tujuan[:8] + "_greyscale/" + tujuan[8:]
 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI convert()
 		filebaru = gambarGreyscale.convert(mode='L').save(namafilebaru)
-		displayFileMod = url[:-4] + "_greyscale" + url[-4:]
+		displayFileMod = relative_path[:13] + "_greyscale" + relative_path[13:]
+		
+
 		return render(request, 'pymage/index.html', {
 			'pageStatus':pageStatus,
 			'displayFileMod':displayFileMod,
 			'pageTitle':pageTitle,
 			'indexActive':indexActive,
-			'displayFile':displayFile
+			'displayFile':namafilebaru,
+			'url': uploaded_img_path_url,
+			'settingsBASE_DIR': settings.BASE_DIR,
+			'tujuan': tujuan,
+			'settingsMEDI_DIR': settings.MEDIA_ROOT,
+			'displayFile': relative_path,
+			'gambarGreyscale': gambarGreyscale,
+			'filebaru': filebaru,
 			})
 	return render(request, 'pymage/index.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
-		'indexActive':indexActive
+		'indexActive':indexActive,
+		'settingsBASE_DIR': settings.BASE_DIR,
+		'upload_dir': upload_dir,
+		'settingsMEDI_DIR': settings.MEDIA_ROOT,
+		
 		})
+
+
+# def seek(request):
+# 	seekActive = 'active'
+# 	pageTitle = 'Image Seeker'
+# 	pageStatus = 1
+# 	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
+# 	actual = []
+# 	pred = []
+# 	if request.method == 'POST':
+# 		uploaded_file = request.FILES['imagefile']
+# 		pageStatus = 2
+# 		fs = FileSystemStorage()
+# 		name = fs.save(uploaded_file.name, uploaded_file)
+# 		url = fs.url(name)
+# 		displayFile = url
+# 		tujuan = "/srv/http/djangoproject" + url
+# 		gambarSeek = Image.open(tujuan)
+# 		query = fe.ekstraksi(gambarSeek)
+# 		dists = np.linalg.norm(features - query, axis=1) # Mencari
+# 		ids = np.argsort(dists)[:6] # 6 Result Terdekat
+# 		scores = [(dists[id], img_paths[id]) for id in ids]
+# 		nearest = scores
+# 		dataCounter = len(glob.glob1("/srv/http/djangoproject/media/img", "*.jpg"))
+# 		namaAktual = uploaded_file.name[:4]
+# 		namaPrediksi = scores[1][1][11:15]
+# 		dataAktual = 1 if namaAktual in positif else 0
+# 		dataPrediksi = 1 if namaPrediksi in positif else 0
+# 		with open('/srv/http/djangoproject/media/confusion.csv', mode='a') as confusion_file:
+# 			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+# 			confusion_writer.writerow([dataAktual, dataPrediksi])
+# 		colnames = ['actual', 'predict']
+# 		datacsv = pandas.read_csv('/srv/http/djangoproject/media/confusion.csv', names=colnames)
+# 		actual = datacsv.actual.tolist()
+# 		pred = datacsv.predict.tolist()
+# 		accuracy = int(accuracy_score(actual,pred) * 100)
+# 		precision = int(precision_score(actual,pred) * 100)
+# 		recall = int(recall_score(actual,pred) * 100)
+# 		f1score = int(f1_score(actual,pred) * 100)
+# 		return render(request,'pymage/seek.html', {
+# 			'displayFile':displayFile,
+# 			'pageStatus':pageStatus,
+# 			'pageTitle':pageTitle,
+# 			'seekActive':seekActive,
+# 			'scores':scores,
+# 			'nearest':nearest,
+# 			'dataCounter':dataCounter,
+# 			'accuracy':accuracy,
+# 			'precision':precision,
+# 			'recall':recall,
+# 			'f1score':f1score
+# 			})
+# 	return render(request, 'pymage/seek.html', {
+# 		'pageStatus':pageStatus,
+# 		'pageTitle':pageTitle,
+# 		'seekActive':seekActive
+# 		})
+
 
 def seek(request):
 	seekActive = 'active'
@@ -80,8 +198,8 @@ def seek(request):
 		dataAktual = 1 if namaAktual in positif else 0
 		dataPrediksi = 1 if namaPrediksi in positif else 0
 		with open('/srv/http/djangoproject/media/confusion.csv', mode='a') as confusion_file:
-		    confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-		    confusion_writer.writerow([dataAktual, dataPrediksi])
+			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+			confusion_writer.writerow([dataAktual, dataPrediksi])
 		colnames = ['actual', 'predict']
 		datacsv = pandas.read_csv('/srv/http/djangoproject/media/confusion.csv', names=colnames)
 		actual = datacsv.actual.tolist()
@@ -109,6 +227,64 @@ def seek(request):
 		'seekActive':seekActive
 		})
 
+
+
+from .essnt_methods import EssentialMethodsClass
+esst_methods = EssentialMethodsClass()
+def seekTest(request):
+	seekActive = 'active'
+	pageTitle = 'Image Seeker'
+	pageStatus = 1
+	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
+	actual = []
+	pred = []
+	if request.method == 'POST':
+		uploaded_file = request.FILES['imagefile']
+		pageStatus = 2
+		img = esst_methods.get_Uploaded_Image(uploaded_file)
+		displayFile = esst_methods.relativePathMediaTemplate()
+		query = fe.ekstraksi(img)
+		dists = np.linalg.norm(features - query, axis=1) # Mencari
+		ids = np.argsort(dists)[:6] # 6 Result Terdekat
+		scores = [(dists[id], img_paths[id]) for id in ids]
+		nearest = scores
+		dataCounter = len(glob.glob1(Path(str(esst_methods.media_dir)+'/img/'), "*.jpg"))
+		namaAktual = uploaded_file.name[:4]
+		namaPrediksi = scores[1][1][11:15]
+		dataAktual = 1 if namaAktual in positif else 0
+		dataPrediksi = 1 if namaPrediksi in positif else 0
+		with open(Path(str(esst_methods.media_dir)+'confusion.csv'), mode='a') as confusion_file:
+			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+			confusion_writer.writerow([dataAktual, dataPrediksi])
+		colnames = ['actual', 'predict']
+		datacsv = pandas.read_csv(Path(str(esst_methods.media_dir)+'confusion.csv'), names=colnames)
+		actual = datacsv.actual.tolist()
+		pred = datacsv.predict.tolist()
+		accuracy = int(accuracy_score(actual,pred) * 100)
+		precision = int(precision_score(actual,pred) * 100)
+		recall = int(recall_score(actual,pred) * 100)
+		f1score = int(f1_score(actual,pred) * 100)
+		return render(request,'pymage/seek.html', {
+			'displayFile':displayFile,
+			'pageStatus':pageStatus,
+			'pageTitle':pageTitle,
+			'seekActive':seekActive,
+			'scores':scores,
+			'nearest':nearest,
+			'dataCounter':dataCounter,
+			'accuracy':accuracy,
+			'precision':precision,
+			'recall':recall,
+			'f1score':f1score
+			})
+	return render(request, 'pymage/seek.html', {
+		'pageStatus':pageStatus,
+		'pageTitle':pageTitle,
+		'seekActive':seekActive
+		})
+
+
+upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
 def rotate(request):
 	rotateActive = 'active'
 	pageTitle = 'Rotate'
@@ -116,19 +292,20 @@ def rotate(request):
 	if request.method == 'POST':
 		uploaded_file = request.FILES['imagefile']
 		pageStatus = 2
-		fs = FileSystemStorage()
-		name = fs.save(uploaded_file.name, uploaded_file)
-		url = fs.url(name)
-		displayFile = url
+		img = esst_methods.get_Uploaded_Image(uploaded_file)
+		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+		img.save(uploaded_img_path_url)
+		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		return render(request, 'pymage/rotate.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'rotateActive':rotateActive
+			'rotateActive':rotateActive,
+			'image': img,
 			})
 	if request.GET.get('degree'):
 		displayFile = request.GET['displayFromPallet']
-		tujuan = "/srv/http/djangoproject" + displayFile
+		tujuan = settings.BASE_DIR + '/' + displayFile
 		gambarRotate = Image.open(tujuan)
 		namafilebaru = tujuan[:-4] + "_rotate" + tujuan[-4:]
 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI rotate()
@@ -156,10 +333,10 @@ def flip(request):
 	pageStatus = 1
 	if request.method == 'POST':
 		uploaded_file = request.FILES['imagefile']
-		fs = FileSystemStorage()
-		name = fs.save(uploaded_file.name, uploaded_file)
-		url = fs.url(name)
-		displayFile = url
+		img = esst_methods.get_Uploaded_Image(uploaded_file)
+		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+		img.save(uploaded_img_path_url)
+		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		pageStatus = 2
 		return render(request, 'pymage/flip.html', {
 			'displayFile':displayFile,
@@ -169,7 +346,8 @@ def flip(request):
 			})
 	if request.GET.get('leftright'):
 		displayFile = request.GET['displayFromPallet']
-		tujuan = "/srv/http/djangoproject" + displayFile
+		# tujuan = "/srv/http/djangoproject" + displayFile
+		tujuan = settings.BASE_DIR + '/' + displayFile
 		gambarFlip = Image.open(tujuan)
 		namafilebaru = tujuan[:-4] + "_flip" + tujuan[-4:]
 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI transpose()
@@ -187,7 +365,8 @@ def flip(request):
 			})
 	if request.GET.get('topbottom'):
 		displayFile = request.GET['displayFromPallet']
-		tujuan = "/srv/http/djangoproject" + displayFile
+		# tujuan = "/srv/http/djangoproject" + displayFile
+		tujuan = settings.BASE_DIR + '/' + displayFile
 		gambarFlip = Image.open(tujuan)
 		namafilebaru = tujuan[:-4] + "_flip" + tujuan[-4:]
 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI transpose()
@@ -216,10 +395,10 @@ def crop(request):
 	if request.method == 'POST':
 		uploaded_file = request.FILES['imagefile']
 		pageStatus = 2
-		fs = FileSystemStorage()
-		name = fs.save(uploaded_file.name, uploaded_file)
-		url = fs.url(name)
-		displayFile = url
+		img = esst_methods.get_Uploaded_Image(uploaded_file)
+		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+		img.save(uploaded_img_path_url)
+		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		return render(request, 'pymage/crop.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
@@ -228,7 +407,8 @@ def crop(request):
 			})
 	if request.GET.get('x'):
 		displayFile = request.GET['displayFromPallet']
-		tujuan = "/srv/http/djangoproject" + displayFile
+		# tujuan = "/srv/http/djangoproject" + displayFile
+		tujuan = settings.BASE_DIR + '/' + displayFile
 		gambarCrop = Image.open(tujuan)
 		namafilebaru = tujuan[:-4] + "_crop" + tujuan[-4:]
 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI crop()
@@ -266,3 +446,54 @@ def invert(request):
 		'invertActive':invertActive
 		})
 
+
+# similar Search
+from .feature_extractor import FeatureExtractor
+def similar_search(request):
+    searchActive = 'active'
+    pageTitle = 'Image Search'
+    pageStatus = 1
+    fe = FeatureExtractor()
+    features = []
+    img_paths = []
+    upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
+    features_dir = Path(str(settings.MEDIA_ROOT)+'/feature/')
+    img_dir = Path(str(settings.MEDIA_ROOT)+'/img/')
+    path = img_dir
+    start = settings.BASE_DIR
+    relative_path_media = os.path.relpath(path, start)
+    for feature_path in Path(features_dir).glob("*.npy"):
+        features.append(np.load(feature_path))
+        img_paths.append(Path('/media/img') / (feature_path.stem + ".jpg"))
+	
+    features = np.array(features)
+      
+    if request.method == 'POST':
+        uploaded_file = request.FILES['imagefile']
+        # Save query image
+        pageStatus = 2
+        img = esst_methods.get_Uploaded_Image(uploaded_file)
+        uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+        img.save(uploaded_img_path)
+        
+        relative_path = esst_methods.getrelativePathMediaTemplate(uploaded_img_path, start)
+        # Run search
+        query = fe.extract(img)
+        dists = np.linalg.norm(features-query, axis=1)  # L2 distances to features
+        ids = np.argsort(dists)[:30]  # Top 30 results
+        scores = [(dists[id], img_paths[id]) for id in ids]
+        
+        
+        return render(request, 'pymage/imagesearch.html', 
+                  {'uploaded_img_path' : relative_path, 'scores' : scores,
+		   		'pageStatus': pageStatus, 'searchActive': searchActive, 'pageTitle': pageTitle,
+                    })
+    else:
+    	return render(request, 'pymage/imagesearch.html',{'features': features, 'image_path': img_paths,
+                                             'feature_dir': features_dir,'img_dir' : img_dir, 'media_root': settings.MEDIA_ROOT,
+                                             'relative_path' : relative_path_media, 'pageStatus': pageStatus, 
+											 'searchActive': searchActive, 'pageTitle': pageTitle,
+											 } )
+    
+    
+	

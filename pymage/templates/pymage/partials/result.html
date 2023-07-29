@@ -10,11 +10,13 @@
                 <div class="card-body">
                   <div style="padding: 20px;">
                     <center>
-                      <img src="http://127.0.0.1{{ displayFile }}" alt="Original Image" style="max-height: 100%; max-width: 100%">
+                      {% comment %} <img src="http://127.0.0.1{{ displayFile }}" alt="Original Image" style="max-height: 100%; max-width: 100%"> {% endcomment %}
+                      <img src="{{ displayFile }}" alt="Original Image" style="max-height: 100%; max-width: 100%">
+                       
                     </center>
                   </div>
                   <div class="my-2"></div>
-                  <a href="http://127.0.0.1{{ displayFile }}" class="btn btn-success btn-icon-split">
+                  <a href="http://127.0.0.1:9000/{{ displayFileMod }}" class="btn btn-success btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-download"></i>
                     </span>
@@ -34,11 +36,11 @@
                 <div class="card-body">
                   <div style="padding: 20px;">
                     <center>
-                      <img src="http://127.0.0.1{{ displayFileMod }}" alt="Modified Image" style="max-height: 100%; max-width: 100%">
+                      <img src="{{ displayFileMod }}" alt="Modified Image" style="max-height: 100%; max-width: 100%">
                     </center>
                   </div>
                   <div class="my-2"></div>
-                  <a href="http://127.0.0.1{{ displayFileMod }}" class="btn btn-success btn-icon-split">
+                  <a href="http://127.0.0.1:9000/{{ displayFileMod }}" class="btn btn-success btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-download"></i>
                     </span>

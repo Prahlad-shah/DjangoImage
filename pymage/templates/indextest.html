@@ -1,0 +1,26 @@
+<html>
+    <title>Test-Page</title>
+    <body>
+        <h3> settingsBASE_DIR ==> {{settingsBASE_DIR}} </h3>
+        <h3> url==> {{url}} </h3>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <Label>Upload Image</Label>
+            <input type="file" name="imagefile" id="imagefile">
+            <input type="submit" value="submit">
+        </form>
+        <h3>Media Directory ==> {{settingsMEDI_DIR}} </h3>
+        <h3>upload_dir ==> {{upload_dir}} </h3>
+        <h3>upload_dir ==> {{relative_path}} </h3>
+        <h3>displayFileMod ==> {{displayFileMod}}</h3>
+        <h3>relative_path==> {{relative_path}} </h3>
+        <h3>filebaru==> {{filebaru}} </h3>
+        <h3>displayFile==> {{displayFile}} </h3>
+        <h3>Image Byte ==> {{image}} </h3>
+        <h2>Original Image </h2>
+        <img src="{{relative_path}}" alt="uploadImage">
+        <img src="{{displayFile}}" alt="uploadImage">
+        <h2>GrayScale Image </h2>
+        <img src="{{displayFileMod}}" alt="Image-File">
+    </body>
+</html>
