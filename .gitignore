@@ -1,1 +1,2 @@
-/djangomage/media/
+/djangomage/media/img/*
+/djangomage/media/uploads/*

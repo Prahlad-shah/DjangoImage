@@ -32,3 +32,4 @@ wheel
 scikit-learn
 learn
 Pandas
+cv2
