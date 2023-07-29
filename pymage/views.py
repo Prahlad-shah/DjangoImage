@@ -13,55 +13,16 @@ import csv
 import pandas
 from pymage.cari_ciri import PencariCiri
 from django.conf import settings
-
-fe = PencariCiri()
-features = []
-img_paths = []
-for feature_path in glob.glob("/srv/http/djangoproject/media/ciri/*"):
-    features.append(pickle.load(open(feature_path, 'rb')))
-    img_paths.append('/media/img/' + os.path.splitext(os.path.basename(feature_path))[0] + '.jpg')
-
-class Home(TemplateView):
-	template_name = 'index.html'
-	# template_name = 'indextest.html'
-
-# def index(request):
-# 	indexActive = 'active'
-# 	pageTitle = 'Greyscale'
-# 	pageStatus = 1
-# 	if request.method == 'POST':
-# 		uploaded_file = request.FILES['imagefile']
-# 		pageStatus = 2
-# 		fs = FileSystemStorage()
-# 		name = fs.save(uploaded_file.name, uploaded_file)
-# 		url = fs.url(name)
-# 		displayFile = url
-# 		# tujuan = "/srv/http/djangoproject" + url
-# 		tujuan = settings.BASE_DIR + url
-# 		gambarGreyscale = Image.open(tujuan)
-# 		namafilebaru = tujuan[:-4] + "_greyscale" + tujuan[-4:]
-# 		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI convert()
-# 		filebaru = gambarGreyscale.convert(mode='L').save(namafilebaru)
-# 		displayFileMod = url[:-4] + "_greyscale" + url[-4:]
-# 		return render(request, 'pymage/index.html', {
-# 			'pageStatus':pageStatus,
-# 			'displayFileMod':displayFileMod,
-# 			'pageTitle':pageTitle,
-# 			'indexActive':indexActive,
-# 			'displayFile':displayFile
-# 			})
-# 	return render(request, 'pymage/index.html', {
-# 		'pageStatus':pageStatus,
-# 		'pageTitle':pageTitle,
-# 		'indexActive':indexActive
-# 		})
-
 from pathlib import Path
 from datetime import datetime
 from io import BytesIO
 from django.conf import settings
 from subscriptable_path import Path as s_path
-def indexTest(request):
+
+class Home(TemplateView):
+	template_name = 'index.html'
+	
+def index(request):
 	indexActive = 'active'
 	pageTitle = 'Greyscale'
 	pageStatus = 1
@@ -114,119 +75,17 @@ def indexTest(request):
 		})
 
 
-# def seek(request):
-# 	seekActive = 'active'
-# 	pageTitle = 'Image Seeker'
-# 	pageStatus = 1
-# 	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
-# 	actual = []
-# 	pred = []
-# 	if request.method == 'POST':
-# 		uploaded_file = request.FILES['imagefile']
-# 		pageStatus = 2
-# 		fs = FileSystemStorage()
-# 		name = fs.save(uploaded_file.name, uploaded_file)
-# 		url = fs.url(name)
-# 		displayFile = url
-# 		tujuan = "/srv/http/djangoproject" + url
-# 		gambarSeek = Image.open(tujuan)
-# 		query = fe.ekstraksi(gambarSeek)
-# 		dists = np.linalg.norm(features - query, axis=1) # Mencari
-# 		ids = np.argsort(dists)[:6] # 6 Result Terdekat
-# 		scores = [(dists[id], img_paths[id]) for id in ids]
-# 		nearest = scores
-# 		dataCounter = len(glob.glob1("/srv/http/djangoproject/media/img", "*.jpg"))
-# 		namaAktual = uploaded_file.name[:4]
-# 		namaPrediksi = scores[1][1][11:15]
-# 		dataAktual = 1 if namaAktual in positif else 0
-# 		dataPrediksi = 1 if namaPrediksi in positif else 0
-# 		with open('/srv/http/djangoproject/media/confusion.csv', mode='a') as confusion_file:
-# 			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-# 			confusion_writer.writerow([dataAktual, dataPrediksi])
-# 		colnames = ['actual', 'predict']
-# 		datacsv = pandas.read_csv('/srv/http/djangoproject/media/confusion.csv', names=colnames)
-# 		actual = datacsv.actual.tolist()
-# 		pred = datacsv.predict.tolist()
-# 		accuracy = int(accuracy_score(actual,pred) * 100)
-# 		precision = int(precision_score(actual,pred) * 100)
-# 		recall = int(recall_score(actual,pred) * 100)
-# 		f1score = int(f1_score(actual,pred) * 100)
-# 		return render(request,'pymage/seek.html', {
-# 			'displayFile':displayFile,
-# 			'pageStatus':pageStatus,
-# 			'pageTitle':pageTitle,
-# 			'seekActive':seekActive,
-# 			'scores':scores,
-# 			'nearest':nearest,
-# 			'dataCounter':dataCounter,
-# 			'accuracy':accuracy,
-# 			'precision':precision,
-# 			'recall':recall,
-# 			'f1score':f1score
-# 			})
-# 	return render(request, 'pymage/seek.html', {
-# 		'pageStatus':pageStatus,
-# 		'pageTitle':pageTitle,
-# 		'seekActive':seekActive
-# 		})
 
+fe = PencariCiri()
+features = []
+img_paths = []
 
-def seek(request):
-	seekActive = 'active'
-	pageTitle = 'Image Seeker'
-	pageStatus = 1
-	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
-	actual = []
-	pred = []
-	if request.method == 'POST':
-		uploaded_file = request.FILES['imagefile']
-		pageStatus = 2
-		fs = FileSystemStorage()
-		name = fs.save(uploaded_file.name, uploaded_file)
-		url = fs.url(name)
-		displayFile = url
-		tujuan = "/srv/http/djangoproject" + url
-		gambarSeek = Image.open(tujuan)
-		query = fe.ekstraksi(gambarSeek)
-		dists = np.linalg.norm(features - query, axis=1) # Mencari
-		ids = np.argsort(dists)[:6] # 6 Result Terdekat
-		scores = [(dists[id], img_paths[id]) for id in ids]
-		nearest = scores
-		dataCounter = len(glob.glob1("/srv/http/djangoproject/media/img", "*.jpg"))
-		namaAktual = uploaded_file.name[:4]
-		namaPrediksi = scores[1][1][11:15]
-		dataAktual = 1 if namaAktual in positif else 0
-		dataPrediksi = 1 if namaPrediksi in positif else 0
-		with open('/srv/http/djangoproject/media/confusion.csv', mode='a') as confusion_file:
-			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-			confusion_writer.writerow([dataAktual, dataPrediksi])
-		colnames = ['actual', 'predict']
-		datacsv = pandas.read_csv('/srv/http/djangoproject/media/confusion.csv', names=colnames)
-		actual = datacsv.actual.tolist()
-		pred = datacsv.predict.tolist()
-		accuracy = int(accuracy_score(actual,pred) * 100)
-		precision = int(precision_score(actual,pred) * 100)
-		recall = int(recall_score(actual,pred) * 100)
-		f1score = int(f1_score(actual,pred) * 100)
-		return render(request,'pymage/seek.html', {
-			'displayFile':displayFile,
-			'pageStatus':pageStatus,
-			'pageTitle':pageTitle,
-			'seekActive':seekActive,
-			'scores':scores,
-			'nearest':nearest,
-			'dataCounter':dataCounter,
-			'accuracy':accuracy,
-			'precision':precision,
-			'recall':recall,
-			'f1score':f1score
-			})
-	return render(request, 'pymage/seek.html', {
-		'pageStatus':pageStatus,
-		'pageTitle':pageTitle,
-		'seekActive':seekActive
-		})
+upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
+features_dir = str(settings.MEDIA_ROOT)+'/feature/*'
 
+for feature_path in glob.glob(features_dir):
+    features.append(np.load(feature_path))
+    img_paths.append('/media/img/' + os.path.splitext(os.path.basename(feature_path))[0] + '.jpg')
 
 
 from .essnt_methods import EssentialMethodsClass
@@ -242,7 +101,10 @@ def seekTest(request):
 		uploaded_file = request.FILES['imagefile']
 		pageStatus = 2
 		img = esst_methods.get_Uploaded_Image(uploaded_file)
-		displayFile = esst_methods.relativePathMediaTemplate()
+		upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
+		uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+		img.save(uploaded_img_path)
+		displayFile = esst_methods.getrelativePathMediaTemplate(full_path=uploaded_img_path, exclude_path=esst_methods.base_dir)
 		query = fe.ekstraksi(img)
 		dists = np.linalg.norm(features - query, axis=1) # Mencari
 		ids = np.argsort(dists)[:6] # 6 Result Terdekat

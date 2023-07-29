@@ -138,7 +138,7 @@
   </div>
   <div class="card-body">
     <div style="padding: 20px;">
-      <center><img src="http://127.0.0.1{{ displayFile }}" alt="Query Image"></center>
+      <center><img src="{{ displayFile }}" alt="Query Image"></center>
     </div>
   </div>
 </div>
@@ -150,7 +150,7 @@
   <div class="card-body">
     {% for score in scores %}
     <figure style="float: left; padding: 42px; margin-right: 10px; margin-bottom: 30px;">
-      <img src="http://127.0.0.1{{ score.1 }}" height="200px">
+      <img src="{{ score.1 }}" height="200px">
       <figcaption>Distance: {{ score.0 }}</figcaption>
     </figure>
     {% endfor %}
