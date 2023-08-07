@@ -36,11 +36,11 @@
                 <div class="card-body">
                   <div style="padding: 20px;">
                     <center>
-                      <img src="{{ scores.1.1 }}" alt="Searched Image" style="max-height: 100%; max-width: 100%">
+                      <img src="{{ k_neighbours.0 }}" alt="Searched Image" style="max-height: 100%; max-width: 100%">
                     </center>
                   </div>
                   <div class="my-2"></div>
-                  <a href="http://127.0.0.1:9000/{{ scores.0.0 }}" class="btn btn-success btn-icon-split">
+                  <a href="http://127.0.0.1:9000/{{ k_neighbours.0 }}" class="btn btn-success btn-icon-split">
                     <span class="icon text-white-50">
                       <i class="fas fa-download"></i>
                     </span>
@@ -90,11 +90,11 @@
             <h6 class="m-0 font-weight-bold text-primary">Similar Images:</h6>
           </div>
           <div class="card-body text-center">
-            {% for score in scores %}
+            {% for item1, item2 in zipped_list %}
             <figure  class="border border-success" style="float: left; padding: 30px; margin-left: 30px; margin-right: 30px; margin-bottom: 30px;">
-              <img src="{{ score.1 }}" height="200px">
+              <img src="{{ item1 }}" height="200px" width="200px">
               {% comment %} <figcaption> {{ score.1.name }}</figcaption><br> {% endcomment %}
-              <figcaption> {{ score.0 }}</figcaption>
+              <figcaption> {{ item2 }}</figcaption>
             </figure>
             {% endfor %}
           </div>

@@ -18,9 +18,10 @@ from datetime import datetime
 from io import BytesIO
 from django.conf import settings
 from subscriptable_path import Path as s_path
+from .essnt_methods import EssentialMethodsClass
 
 class Home(TemplateView):
-	template_name = 'index.html'
+	template_name = 'accounts:home.html'
 	
 def index(request):
 	indexActive = 'active'
@@ -50,7 +51,7 @@ def index(request):
 		displayFileMod = relative_path[:13] + "_greyscale" + relative_path[13:]
 		
 
-		return render(request, 'pymage/index.html', {
+		return render(request, 'pymage/grayscale.html', {
 			'pageStatus':pageStatus,
 			'displayFileMod':displayFileMod,
 			'pageTitle':pageTitle,
@@ -64,7 +65,7 @@ def index(request):
 			'gambarGreyscale': gambarGreyscale,
 			'filebaru': filebaru,
 			})
-	return render(request, 'pymage/index.html', {
+	return render(request, 'pymage/grayscale.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
 		'indexActive':indexActive,
@@ -76,6 +77,8 @@ def index(request):
 
 
 
+from .essnt_methods import EssentialMethodsClass
+esst_methods = EssentialMethodsClass()
 fe = PencariCiri()
 features = []
 img_paths = []
@@ -87,9 +90,6 @@ for feature_path in glob.glob(features_dir):
     features.append(np.load(feature_path))
     img_paths.append('/media/img/' + os.path.splitext(os.path.basename(feature_path))[0] + '.jpg')
 
-
-from .essnt_methods import EssentialMethodsClass
-esst_methods = EssentialMethodsClass()
 def seekTest(request):
 	seekActive = 'active'
 	pageTitle = 'Image Seeker'
@@ -145,6 +145,62 @@ def seekTest(request):
 		'seekActive':seekActive
 		})
 
+# esst_methods = EssentialMethodsClass()
+# def seekTest(request):
+# 	seekActive = 'active'
+# 	pageTitle = 'Image Seeker'
+# 	pageStatus = 1
+# 	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
+# 	actual = []
+# 	pred = []
+# 	if request.method == 'POST':
+# 		uploaded_file = request.FILES['imagefile']
+# 		pageStatus = 2
+# 		img = esst_methods.get_Uploaded_Image(uploaded_file)
+# 		upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
+# 		uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+# 		img.save(uploaded_img_path)
+# 		displayFile = esst_methods.getrelativePathMediaTemplate(full_path=uploaded_img_path, exclude_path=esst_methods.base_dir)
+# 		query = fe.ekstraksi(img)
+# 		dists = np.linalg.norm(features - query, axis=1) # Mencari
+# 		ids = np.argsort(dists)[:6] # 6 Result Terdekat
+# 		scores = [(dists[id], img_paths[id]) for id in ids]
+# 		nearest = scores
+# 		dataCounter = len(glob.glob1(Path(str(esst_methods.media_dir)+'/img/'), "*.jpg"))
+# 		namaAktual = uploaded_file.name[:4]
+# 		namaPrediksi = scores[1][1][11:15]
+# 		dataAktual = 1 if namaAktual in positif else 0
+# 		dataPrediksi = 1 if namaPrediksi in positif else 0
+# 		with open(Path(str(esst_methods.media_dir)+'confusion.csv'), mode='a') as confusion_file:
+# 			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+# 			confusion_writer.writerow([dataAktual, dataPrediksi])
+# 		colnames = ['actual', 'predict']
+# 		datacsv = pandas.read_csv(Path(str(esst_methods.media_dir)+'confusion.csv'), names=colnames)
+# 		actual = datacsv.actual.tolist()
+# 		pred = datacsv.predict.tolist()
+# 		accuracy = int(accuracy_score(actual,pred) * 100)
+# 		precision = int(precision_score(actual,pred) * 100)
+# 		recall = int(recall_score(actual,pred) * 100)
+# 		f1score = int(f1_score(actual,pred) * 100)
+# 		return render(request,'pymage/seek.html', {
+# 			'displayFile':displayFile,
+# 			'pageStatus':pageStatus,
+# 			'pageTitle':pageTitle,
+# 			'seekActive':seekActive,
+# 			'scores':scores,
+# 			'nearest':nearest,
+# 			'dataCounter':dataCounter,
+# 			'accuracy':accuracy,
+# 			'precision':precision,
+# 			'recall':recall,
+# 			'f1score':f1score
+# 			})
+# 	return render(request, 'pymage/seek.html', {
+# 		'pageStatus':pageStatus,
+# 		'pageTitle':pageTitle,
+# 		'seekActive':seekActive
+# 		})
+
 
 upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
 def rotate(request):
@@ -157,7 +213,7 @@ def rotate(request):
 		img = esst_methods.get_Uploaded_Image(uploaded_file)
 		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
 		img.save(uploaded_img_path_url)
-		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
+		displayFile = esst_methods.getrelativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		return render(request, 'pymage/rotate.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
@@ -198,7 +254,7 @@ def flip(request):
 		img = esst_methods.get_Uploaded_Image(uploaded_file)
 		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
 		img.save(uploaded_img_path_url)
-		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
+		displayFile = esst_methods.getrelativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		pageStatus = 2
 		return render(request, 'pymage/flip.html', {
 			'displayFile':displayFile,
@@ -260,7 +316,7 @@ def crop(request):
 		img = esst_methods.get_Uploaded_Image(uploaded_file)
 		uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
 		img.save(uploaded_img_path_url)
-		displayFile = esst_methods.relativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
+		displayFile = esst_methods.getrelativePathMediaTemplate(uploaded_img_path_url, settings.BASE_DIR)
 		return render(request, 'pymage/crop.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
@@ -308,54 +364,59 @@ def invert(request):
 		'invertActive':invertActive
 		})
 
+    
+from .feature_ext_upload import ExtractFeatureUpload
+query_image_obj = ExtractFeatureUpload()
+relfilenames = query_image_obj.fileNamesOfData()
+filenames_length = len(relfilenames)
+featureAttr = query_image_obj.featureListAttributes()
+classNames = query_image_obj.fileNamesOfData()
 
-# similar Search
-from .feature_extractor import FeatureExtractor
-def similar_search(request):
+def searchFlickrData(request):
     searchActive = 'active'
     pageTitle = 'Image Search'
     pageStatus = 1
-    fe = FeatureExtractor()
-    features = []
-    img_paths = []
+    
     upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
-    features_dir = Path(str(settings.MEDIA_ROOT)+'/feature/')
-    img_dir = Path(str(settings.MEDIA_ROOT)+'/img/')
-    path = img_dir
-    start = settings.BASE_DIR
-    relative_path_media = os.path.relpath(path, start)
-    for feature_path in Path(features_dir).glob("*.npy"):
-        features.append(np.load(feature_path))
-        img_paths.append(Path('/media/img') / (feature_path.stem + ".jpg"))
-	
-    features = np.array(features)
-      
-    if request.method == 'POST':
-        uploaded_file = request.FILES['imagefile']
-        # Save query image
+    root_dir = Path(str(settings.MEDIA_ROOT)+'/Flickr_32')
+    if request.method == 'POST' and request.FILES['imagefile']:
+        image = request.FILES['imagefile']
         pageStatus = 2
-        img = esst_methods.get_Uploaded_Image(uploaded_file)
-        uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
+        # Save query image
+        from io import BytesIO
+        buffer = BytesIO()
+        buffer.write(image.read())
+        buffer.seek(0)
+        img = Image.open(buffer)  # PIL image
+        uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + image.name)
         img.save(uploaded_img_path)
+
+        path = uploaded_img_path
+        start = settings.BASE_DIR
+        uploaded_img_rel_path = os.path.relpath(path, start)
+ 
+        query_image = query_image_obj.extract_features(path)
+        k_neighbours = query_image_obj.knnMethod(query_image)
         
-        relative_path = esst_methods.getrelativePathMediaTemplate(uploaded_img_path, start)
-        # Run search
-        query = fe.extract(img)
-        dists = np.linalg.norm(features-query, axis=1)  # L2 distances to features
-        ids = np.argsort(dists)[:30]  # Top 30 results
-        scores = [(dists[id], img_paths[id]) for id in ids]
-        
+        splitClassName = []
+        for filepath in k_neighbours:
+            splitClassText = filepath.split('/')[-2]
+            splitClassName.append(splitClassText)
+        zipped_list = zip(k_neighbours, splitClassName)
         
         return render(request, 'pymage/imagesearch.html', 
-                  {'uploaded_img_path' : relative_path, 'scores' : scores,
-		   		'pageStatus': pageStatus, 'searchActive': searchActive, 'pageTitle': pageTitle,
-                    })
+                  {'uploaded_img_path' : uploaded_img_rel_path, 'query_image_feature' : query_image,
+                    'filenames': relfilenames, 'filenames_length': filenames_length, 'k_neighbours':k_neighbours,
+                    'searchActive': searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus, 'zipped_list':zipped_list})
+
     else:
-    	return render(request, 'pymage/imagesearch.html',{'features': features, 'image_path': img_paths,
-                                             'feature_dir': features_dir,'img_dir' : img_dir, 'media_root': settings.MEDIA_ROOT,
-                                             'relative_path' : relative_path_media, 'pageStatus': pageStatus, 
-											 'searchActive': searchActive, 'pageTitle': pageTitle,
-											 } )
-    
+        return render(request, 'pymage/imagesearch.html',{'media_root': settings.MEDIA_ROOT,
+                                              'root_dir': root_dir, 'filenames': relfilenames,
+                                             'filenames_length': filenames_length, 'featureAttr0': featureAttr[0],
+                                               'featureAttr1': featureAttr[1], 'featureAttr2': featureAttr[2],
+                                               'classNames': classNames,
+                                               'searchActive':searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus} )
+
+
     
 	

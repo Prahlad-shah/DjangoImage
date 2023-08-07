@@ -37,8 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third Party Apps
+    'crispy_forms',
+    'crispy_bootstrap4',
+
     'pymage.apps.PymageConfig',
+    'accounts.apps.AccountsConfig',
 ]
+
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap4'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,10 +62,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'djangoproject.urls'
 TEMPLATES_DIR_PYIMG = os.path.join(BASE_DIR, 'pymage/templates')
+TEMPLATES_DIR_ACC = os.path.join(BASE_DIR, 'accounts/accounts_templates')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATES_DIR_PYIMG,],
+        'DIRS': [TEMPLATES_DIR_PYIMG, TEMPLATES_DIR_ACC,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
