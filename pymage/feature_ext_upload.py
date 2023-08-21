@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.linalg import norm
 import pickle
-# from tqdm import tqdm, tqdm_notebook
+from tqdm import tqdm, tqdm_notebook
 import os
 import random
 import time
@@ -25,11 +25,14 @@ from sklearn.neighbors import NearestNeighbors
 import glob
 
 class ExtractFeatureUpload():
-    feature_list = pickle.load(open('/media/hdd/kalilinux/projects/website_projects/src/IMG_Classifier/trained-models/features-flickr-resnet.pickle',
+    feature_list = pickle.load(open('/media/hdd/kalilinux/GITHubProjects/djangomage/trained-models/features-flickr-resnet.pickle',
                                 'rb'))
-    root_dir = Path(str(settings.MEDIA_ROOT),'/Flickr_32')
+    # root_dir_dataset = Path(str(settings.MEDIA_ROOT),'/Flickr_32')
+    
+    root_dir_dataset = '/media/hdd/kalilinux/GITHubProjects/djangomage/media/Flickr_32'
     filenames = []
     relFilenames = []
+    distances = []
     def __init__(self):
         self.model = ResNet50(weights='imagenet',
                  include_top=False,
@@ -50,8 +53,8 @@ class ExtractFeatureUpload():
         return normalized_features
 
     def fileNamesOfData(self):
-        start = '/media/hdd/kalilinux/projects/website_projects/src/IMG_Classifier'
-        for filename in sorted(glob.glob('/media/hdd/kalilinux/projects/website_projects/src/IMG_Classifier/media/Flickr_32/**/*.jpg', recursive=True)):
+        start = settings.BASE_DIR
+        for filename in sorted(glob.glob('/media/hdd/kalilinux/GITHubProjects/djangomage/media/Flickr_32/**/*.jpg', recursive=True)):
             self.filenames.append(filename)
         
         for imagename in self.filenames:
@@ -60,7 +63,7 @@ class ExtractFeatureUpload():
         return self.relFilenames
     
     def classNames(self):
-        classNames = os.listdir('/media/hdd/kalilinux/projects/website_projects/src/IMG_Classifier/media/Flickr_32')
+        classNames = os.listdir('/media/hdd/kalilinux/GITHubProjects/djangomage/media/Flickr_32')
         return sorted(classNames)
     
     def featureListAttributes(self):
@@ -80,4 +83,67 @@ class ExtractFeatureUpload():
             fileindex.append(fileIndex)
         return fileindex
     
+    def get_file_list(self):
+        extensions = ['.jpg', '.JPG', '.jpeg', '.JPEG', '.png', '.PNG']
+        file_list = []
+        for root, directories, filenames in os.walk(self.root_dir_dataset):
+            for filename in filenames:
+                if any(ext in filename for ext in extensions):
+                    filepath = os.path.join(root, filename)
+                    if os.path.exists(filepath):
+                      file_list.append(filepath)
+                    else:
+                      print(filepath)
+        return file_list
+
+
+    
+    def getDistanceInfo(self):
+        neighbors = NearestNeighbors(n_neighbors=len(self.feature_list),
+                             algorithm='brute',
+                             metric='euclidean').fit(self.feature_list)
+        distances, indices = neighbors.kneighbors(self.feature_list)
+
+        # # Calculating some stats
+        # print("Median distance between all photos: ", np.median(distances))
+        # print("Max distance between all photos: ", np.max(distances))
+        # print("Median distance among most similar photos: ",
+        #       np.median(distances[:, 2]))
+        median_dist_all_photo = np.median(distances)
+        max_dist_all_photo = np.max(distances)
+        median_dist_allsimilar_photo = np.median(distances[:, 2])
+        return median_dist_all_photo, max_dist_all_photo, median_dist_allsimilar_photo
+        
+    # Helper function to get the classname
+    def getClassname(self, str):
+        return str.split('/')[-2]
+    
+    # Helper function to get the classname and filename
+    def getClassname_filename(self, str):
+        return str.split('/')[-2] + '/' + str.split('/')[-1]
+
+    
+
+    def calculate_accuracy(self):
+        num_nearest_neighbors = 5
+        correct_predictions = 0
+        incorrect_predictions = 0
+        neighbors = NearestNeighbors(n_neighbors=num_nearest_neighbors,
+                                     algorithm='brute',
+                                     metric='euclidean').fit(self.feature_list)
+        for i in tqdm(range(len(self.feature_list))):
+            distances, indices = neighbors.kneighbors([self.feature_list[i]])
+            for j in range(1, num_nearest_neighbors):
+                if (self.getClassname(str(self.filenames[i])) == self.getClassname(
+                        self.filenames[indices[0][j]])):
+                    correct_predictions += 1
+                else:
+                    incorrect_predictions += 1
+                    
+            accuracy = round(100.0 * correct_predictions /
+                      (1.0 * correct_predictions + incorrect_predictions), 2)
+            
+        return accuracy
+
+
         

@@ -11,7 +11,6 @@ import os
 import pickle
 import csv
 import pandas
-from pymage.cari_ciri import PencariCiri
 from django.conf import settings
 from pathlib import Path
 from datetime import datetime
@@ -78,18 +77,18 @@ def index(request):
 
 
 from .essnt_methods import EssentialMethodsClass
+from .feature_ext_upload import ExtractFeatureUpload
 esst_methods = EssentialMethodsClass()
-fe = PencariCiri()
-features = []
-img_paths = []
-
+query_image_obj = ExtractFeatureUpload()
+root_dir = Path(str(settings.MEDIA_ROOT),'/Flickr_32')
 upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
 features_dir = str(settings.MEDIA_ROOT)+'/feature/*'
 
-for feature_path in glob.glob(features_dir):
-    features.append(np.load(feature_path))
-    img_paths.append('/media/img/' + os.path.splitext(os.path.basename(feature_path))[0] + '.jpg')
-
+filenames_new = sorted(query_image_obj.get_file_list())
+length_of_new_file = len(filenames_new)
+classList = query_image_obj.fileNamesOfData()
+accuracy_of_whole_data = query_image_obj.calculate_accuracy()
+distance_info = query_image_obj.getDistanceInfo()
 def seekTest(request):
 	seekActive = 'active'
 	pageTitle = 'Image Seeker'
@@ -104,45 +103,48 @@ def seekTest(request):
 		upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
 		uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
 		img.save(uploaded_img_path)
+		pathImage = uploaded_img_path
 		displayFile = esst_methods.getrelativePathMediaTemplate(full_path=uploaded_img_path, exclude_path=esst_methods.base_dir)
-		query = fe.ekstraksi(img)
-		dists = np.linalg.norm(features - query, axis=1) # Mencari
-		ids = np.argsort(dists)[:6] # 6 Result Terdekat
-		scores = [(dists[id], img_paths[id]) for id in ids]
-		nearest = scores
-		dataCounter = len(glob.glob1(Path(str(esst_methods.media_dir)+'/img/'), "*.jpg"))
-		namaAktual = uploaded_file.name[:4]
-		namaPrediksi = scores[1][1][11:15]
-		dataAktual = 1 if namaAktual in positif else 0
-		dataPrediksi = 1 if namaPrediksi in positif else 0
-		with open(Path(str(esst_methods.media_dir)+'confusion.csv'), mode='a') as confusion_file:
-			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-			confusion_writer.writerow([dataAktual, dataPrediksi])
-		colnames = ['actual', 'predict']
-		datacsv = pandas.read_csv(Path(str(esst_methods.media_dir)+'confusion.csv'), names=colnames)
-		actual = datacsv.actual.tolist()
-		pred = datacsv.predict.tolist()
-		accuracy = int(accuracy_score(actual,pred) * 100)
-		precision = int(precision_score(actual,pred) * 100)
-		recall = int(recall_score(actual,pred) * 100)
-		f1score = int(f1_score(actual,pred) * 100)
+		dataCounter = len(glob.glob1(Path(str(esst_methods.media_dir)+'/Flickr_32/**/'), "*.jpg"))
+		
+		queried_classNames = query_image_obj.getClassname(str(filenames_new[1]))		
+		query_image = query_image_obj.extract_features(pathImage)
+		k_neighbours = query_image_obj.knnMethod(query_image)
+        
+		splitClassName = []
+		for filepath in k_neighbours:
+			splitClassText = filepath.split('/')[-2]
+			splitClassName.append(splitClassText)
+          	
+		zipped_list = zip(k_neighbours, splitClassName)
+		
+
 		return render(request,'pymage/seek.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
 			'seekActive':seekActive,
-			'scores':scores,
-			'nearest':nearest,
-			'dataCounter':dataCounter,
-			'accuracy':accuracy,
-			'precision':precision,
-			'recall':recall,
-			'f1score':f1score
+			'zipped_list': zipped_list,
+		
+  			'queried_classNames': queried_classNames,
+			# 'scores':scores,
+			# 'nearest':nearest,
+			# 'dataCounter':dataCounter,
+			# 'accuracy':accuracy,
+			# 'precision':precision,
+			# 'recall':recall,
+			# 'f1score':f1score
 			})
 	return render(request, 'pymage/seek.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
-		'seekActive':seekActive
+		'seekActive':seekActive,
+		'root_dir': root_dir,
+		'length_of_new_file': length_of_new_file,
+		'classList': classList,
+		'accuracy_of_whole_data': accuracy_of_whole_data,	
+		'distance_info': distance_info,
+		'filenames_new': filenames_new,
 		})
 
 # esst_methods = EssentialMethodsClass()
@@ -394,7 +396,7 @@ def searchFlickrData(request):
         path = uploaded_img_path
         start = settings.BASE_DIR
         uploaded_img_rel_path = os.path.relpath(path, start)
- 
+
         query_image = query_image_obj.extract_features(path)
         k_neighbours = query_image_obj.knnMethod(query_image)
         
