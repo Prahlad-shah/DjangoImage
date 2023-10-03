@@ -45,7 +45,6 @@ def index(request):
 		gambarGreyscale = img
 		tujuan = s_path(uploaded_img_path_url)
 		namafilebaru = tujuan[:8] + "_greyscale/" + tujuan[8:]
-		# CONVERT MULAI DISINI MENGGUNAKAN FUNGSI convert()
 		filebaru = gambarGreyscale.convert(mode='L').save(namafilebaru)
 		displayFileMod = relative_path[:13] + "_greyscale" + relative_path[13:]
 		
@@ -87,7 +86,7 @@ features_dir = str(settings.MEDIA_ROOT)+'/feature/*'
 filenames_new = sorted(query_image_obj.get_file_list())
 length_of_new_file = len(filenames_new)
 classList = query_image_obj.fileNamesOfData()
-accuracy_of_whole_data = query_image_obj.calculate_accuracy()
+# accuracy_of_whole_data = query_image_obj.calculate_accuracy()
 distance_info = query_image_obj.getDistanceInfo()
 def seekTest(request):
 	seekActive = 'active'
@@ -142,7 +141,7 @@ def seekTest(request):
 		'root_dir': root_dir,
 		'length_of_new_file': length_of_new_file,
 		'classList': classList,
-		'accuracy_of_whole_data': accuracy_of_whole_data,	
+		# 'accuracy_of_whole_data': accuracy_of_whole_data,	
 		'distance_info': distance_info,
 		'filenames_new': filenames_new,
 		})

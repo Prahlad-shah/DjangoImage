@@ -31,6 +31,9 @@ ALLOWED_HOSTS = ['django.local', '127.0.0.1']
 # Application definition
 
 INSTALLED_APPS = [
+    'adminsector.apps.AdminsectorConfig',
+    'adminlte3',
+    'adminlte3_theme',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -80,6 +83,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djangoproject.wsgi.application'
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 
 # Database

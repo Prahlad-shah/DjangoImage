@@ -33,25 +33,68 @@
             <h1 class="h3 mb-0 text-gray-800">Home Page</h1>
           </div>
 
-         <div class="card text-center mx-auto my-5" style="width: 18rem;">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">LogoAnyz</h5>
 
-          {% if user.is_authenticated %}
-          <p>Your Name : {{user.first_name}} {{user.last_name}}</p>
-          <p>Email : {{user.email}}</p>
-          <p>Your Username : {{user.username}}</p>
-          <a class="btn btn-primary" href="{% url 'accounts:logout'  %}">Logout</a>
-          {% else %}
-              <p>You are not Logged In. <br> Please Login To View The Page</p>
-              <a class="btn btn-primary" href="{% url 'accounts:login'  %}"><Strong>Login </Strong></a>
-              <a class="btn btn-primary" href="{% url 'accounts:signup'  %}"><Strong>Sign Up</Strong></a>
-          {% endif %}
-         
-              <!-- <a href="#" class="btn btn-primary">Email Us</a> -->
+          <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+              <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+              <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
+            </ol>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/2987462.jpg" alt="First slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/11498693.jpg" alt="Second slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/40366753.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/106523337.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/303236865.jpg" alt="Third slide">
+              </div>
+              <div class="carousel-item">
+                <img class="d-block w-100 rounded" height="350px" src="/media/carueselImages/2175790215.jpg" alt="Third slide">
+              </div>
             </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="sr-only">Next</span>
+            </a>
           </div>
           
+          <!-- Card Information -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <div class="card-header">
+                  <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-info-circle"></i> Information</h6>
+                </div>
+                <div class="card-body">
+                  Welcome {{user.first_name}} {{user.last_name}} to the world of Logo Analyzer which
+                  is a System that is usefull for designers, business experts and government departments
+                  to check their brand logos and trademarks inorder to prevent from the collision and similar
+                  design patterns from others.
+
+                  It is always hard to design a unique logos and trademarks for an organizations.
+                  A trademark is a distinguishable and recognizable sign, design, or expression that identifies specific products or services of a particular source as distinct from others. A logo is a graphic sign, mark, or symbol used to identify a particular source. It is fair to say that a logo is a type of trademark.
+                  So, check it out before making a decision for logo and trademark designs for your business recognition.
+                
+              </div>
+              <a class="btn btn-primary mt-3 " href="{% url 'pymage:search'  %}"><Strong>Upload Image Now </Strong></a>
+                
+            </div>
+          </div>
+          <!-- end card information -->
+
           <!-- Card Information -->
           <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -63,7 +106,7 @@
                 </div>
             </div>
           </div>
-
+          <!-- end card information -->
         </div>
         <!-- /.container-fluid -->
 
