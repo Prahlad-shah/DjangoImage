@@ -22,46 +22,35 @@
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-        <div class="container-fluid">
-
-          <!-- Page Heading -->
-          <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <div class="mb-0 text-gray-700">Login Page</div>
-          </div>
-
-         <div class="card text-center mx-auto mb-5" style="width: 20rem;">
-            <div class="card-body">
-              <h5 class="card-title font-weight-bold">LogoAnyz</h5>
-                
-              <h1>Login Form</h1>
-              <form action="" method="post">
-               {% csrf_token %}
-               <div class="font-weight-bold">{{ form.as_p }}</div>
-               <br>
-               <input class="btn btn-primary" type="submit" value="Login">
-              </form><br>
-              <a href="{% url 'accounts:signup'  %}"><button class="btn btn-primary">Sign Up</button></a>
-               <br><br>
-              <a href="{% url 'accounts:reset_password'  %}"><button class="btn btn-primary">Reset Password</button></a>
+        <div class="container-fluid bg-info">
+          <div class="card bg-dark text-dark">
+            <img src="{% static 'pymage/img/login_background.jpg' %}" class="card-img" alt="login_background">
+            <div class="card-img-overlay">
+              <!-- Page Heading -->
+              <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <div class="h3 mb-0 text-white">Login Page</div>
               </div>
-              </div>
-                    
-         
-            
 
-
-          <!-- Card Information -->
-          <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <div class="card-header">
-                  <h6 class="m-0 font-weight-bold text-primary"><i class="fas fa-fw fa-info-circle"></i> Information</h6>
-                </div>
+              <div class="card text-center mx-auto mb-5" style="width: 20rem;">
                 <div class="card-body">
-                  Logo Analyzer System is a reverse image search engine that enables the users to search the logo images by uploading thir original logo see the features that matches to the other existing logo images.
+                  <h5 class="card-title font-weight-bold">LogoAnyz</h5>
+
+                  <h1>Login Now</h1>
+                  <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="font-weight-bold">{{ form.as_p }}</div>
+                    <br>
+                    <input class="btn btn-primary w-100 font-weight-bold" type="submit" value="Login">
+                  </form><br>
+                  <a href="{% url 'accounts:reset_password'  %}"><button class="btn btn-primary w-100 font-weight-bold">Reset
+                      Password</button>
+                    </a><br><br>
+                   <p class="font-weight-bold">Don't Have an Account <a href="{% url 'accounts:signup'  %}">Sign Up</a></p>
+                  
                 </div>
+              </div>
             </div>
           </div>
-
         </div>
         <!-- /.container-fluid -->
 

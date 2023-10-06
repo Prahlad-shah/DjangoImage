@@ -18,9 +18,19 @@ from io import BytesIO
 from django.conf import settings
 from subscriptable_path import Path as s_path
 from .essnt_methods import EssentialMethodsClass
+from .trademark_info import CompanyInfo
+
+relative_path_profile = 'https://mdbcdn.b-cdn.net/img/new/avatars/1.webp'
 
 class Home(TemplateView):
 	template_name = 'accounts:home.html'
+	template_name = 'home.html'
+	pageTitle = "Homepage"
+	pageStatus = '1'
+	homeActive = 'active'
+	extra_context={'pageTitle': pageTitle, 'pageStatus': pageStatus, 'homekActive': homeActive,
+                   'relative_path_profile': relative_path_profile,}
+
 	
 def index(request):
 	indexActive = 'active'
@@ -62,6 +72,7 @@ def index(request):
 			'displayFile': relative_path,
 			'gambarGreyscale': gambarGreyscale,
 			'filebaru': filebaru,
+			'relative_path_profile': relative_path_profile,
 			})
 	return render(request, 'pymage/grayscale.html', {
 		'pageStatus':pageStatus,
@@ -70,6 +81,7 @@ def index(request):
 		'settingsBASE_DIR': settings.BASE_DIR,
 		'upload_dir': upload_dir,
 		'settingsMEDI_DIR': settings.MEDIA_ROOT,
+		'relative_path_profile':relative_path_profile,
 		
 		})
 
@@ -124,7 +136,7 @@ def seekTest(request):
 			'pageTitle':pageTitle,
 			'seekActive':seekActive,
 			'zipped_list': zipped_list,
-		
+			'relative_path_profile': relative_path_profile,
   			'queried_classNames': queried_classNames,
 			# 'scores':scores,
 			# 'nearest':nearest,
@@ -144,63 +156,9 @@ def seekTest(request):
 		# 'accuracy_of_whole_data': accuracy_of_whole_data,	
 		'distance_info': distance_info,
 		'filenames_new': filenames_new,
+		'relative_path_profile': relative_path_profile,
 		})
 
-# esst_methods = EssentialMethodsClass()
-# def seekTest(request):
-# 	seekActive = 'active'
-# 	pageTitle = 'Image Seeker'
-# 	pageStatus = 1
-# 	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
-# 	actual = []
-# 	pred = []
-# 	if request.method == 'POST':
-# 		uploaded_file = request.FILES['imagefile']
-# 		pageStatus = 2
-# 		img = esst_methods.get_Uploaded_Image(uploaded_file)
-# 		upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
-# 		uploaded_img_path = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + uploaded_file.name)
-# 		img.save(uploaded_img_path)
-# 		displayFile = esst_methods.getrelativePathMediaTemplate(full_path=uploaded_img_path, exclude_path=esst_methods.base_dir)
-# 		query = fe.ekstraksi(img)
-# 		dists = np.linalg.norm(features - query, axis=1) # Mencari
-# 		ids = np.argsort(dists)[:6] # 6 Result Terdekat
-# 		scores = [(dists[id], img_paths[id]) for id in ids]
-# 		nearest = scores
-# 		dataCounter = len(glob.glob1(Path(str(esst_methods.media_dir)+'/img/'), "*.jpg"))
-# 		namaAktual = uploaded_file.name[:4]
-# 		namaPrediksi = scores[1][1][11:15]
-# 		dataAktual = 1 if namaAktual in positif else 0
-# 		dataPrediksi = 1 if namaPrediksi in positif else 0
-# 		with open(Path(str(esst_methods.media_dir)+'confusion.csv'), mode='a') as confusion_file:
-# 			confusion_writer = csv.writer(confusion_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-# 			confusion_writer.writerow([dataAktual, dataPrediksi])
-# 		colnames = ['actual', 'predict']
-# 		datacsv = pandas.read_csv(Path(str(esst_methods.media_dir)+'confusion.csv'), names=colnames)
-# 		actual = datacsv.actual.tolist()
-# 		pred = datacsv.predict.tolist()
-# 		accuracy = int(accuracy_score(actual,pred) * 100)
-# 		precision = int(precision_score(actual,pred) * 100)
-# 		recall = int(recall_score(actual,pred) * 100)
-# 		f1score = int(f1_score(actual,pred) * 100)
-# 		return render(request,'pymage/seek.html', {
-# 			'displayFile':displayFile,
-# 			'pageStatus':pageStatus,
-# 			'pageTitle':pageTitle,
-# 			'seekActive':seekActive,
-# 			'scores':scores,
-# 			'nearest':nearest,
-# 			'dataCounter':dataCounter,
-# 			'accuracy':accuracy,
-# 			'precision':precision,
-# 			'recall':recall,
-# 			'f1score':f1score
-# 			})
-# 	return render(request, 'pymage/seek.html', {
-# 		'pageStatus':pageStatus,
-# 		'pageTitle':pageTitle,
-# 		'seekActive':seekActive
-# 		})
 
 
 upload_dir = Path(str(settings.MEDIA_ROOT)+'/uploads/')
@@ -238,12 +196,14 @@ def rotate(request):
 			'displayFileMod':displayFileMod,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'rotateActive':rotateActive
+			'rotateActive':rotateActive,
+			'relative_path_profile': relative_path_profile,
 			})
 	return render(request, 'pymage/rotate.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
-		'rotateActive':rotateActive
+		'rotateActive':rotateActive,
+		'relative_path_profile': relative_path_profile,
 		})
 
 def flip(request):
@@ -372,7 +332,7 @@ relfilenames = query_image_obj.fileNamesOfData()
 filenames_length = len(relfilenames)
 featureAttr = query_image_obj.featureListAttributes()
 classNames = query_image_obj.fileNamesOfData()
-
+company_info_obj = CompanyInfo()
 def searchFlickrData(request):
     searchActive = 'active'
     pageTitle = 'Image Search'
@@ -403,19 +363,26 @@ def searchFlickrData(request):
         for filepath in k_neighbours:
             splitClassText = filepath.split('/')[-2]
             splitClassName.append(splitClassText)
+            
+        companyInfo_list = company_info_obj.Infolist(splitClassName)
+        brand_info_link = company_info_obj.brand_Info(splitClassName)
+        queried_accuracy = company_info_obj.queriedAccuracy(splitClassName)
+            
         zipped_list = zip(k_neighbours, splitClassName)
         
         return render(request, 'pymage/imagesearch.html', 
                   {'uploaded_img_path' : uploaded_img_rel_path, 'query_image_feature' : query_image,
                     'filenames': relfilenames, 'filenames_length': filenames_length, 'k_neighbours':k_neighbours,
-                    'searchActive': searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus, 'zipped_list':zipped_list})
+                    'searchActive': searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus, 'zipped_list':zipped_list, 
+                    'brand_info': brand_info_link, 'relative_path_profile': relative_path_profile,
+                    'companyInfo_list': companyInfo_list, 'queried_accuracy': queried_accuracy,})
 
     else:
         return render(request, 'pymage/imagesearch.html',{'media_root': settings.MEDIA_ROOT,
                                               'root_dir': root_dir, 'filenames': relfilenames,
                                              'filenames_length': filenames_length, 'featureAttr0': featureAttr[0],
                                                'featureAttr1': featureAttr[1], 'featureAttr2': featureAttr[2],
-                                               'classNames': classNames,
+                                               'classNames': classNames, 'relative_path_profile': relative_path_profile,
                                                'searchActive':searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus} )
 
 

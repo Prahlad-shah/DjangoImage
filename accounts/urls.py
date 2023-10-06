@@ -10,11 +10,12 @@ from django.contrib.auth import views as auth_views
 app_name= 'accounts'
 urlpatterns = [
     path('', AccountHomePageView.as_view(), name='home'),
+    path('profile', views.profilePicture, name='profileUpload'),
     path('user-login', auth_views.LoginView.as_view(template_name = 'user-login.html'), name='login'),
     path('profile/', AccountHomePageView.as_view(), name='profile'),
     path('logout', auth_views.LogoutView.as_view(template_name= 'logout.html'), name= 'logout'),
     path('signup', UserSignUpView.as_view(), name='signup'),
-    path('password-change', auth_views.PasswordChangeView.as_view(template_name = 'password_change.html')),
+    path('password-change', auth_views.PasswordChangeView.as_view(template_name = 'password_change.html'), name='change_password'),
     re_path('password_reset', auth_views.PasswordResetView.as_view(template_name = 'registration/forgot_password.html'), name='reset_password'),
     re_path(r'^password_reset/done/$', auth_views.PasswordResetDoneView.as_view(template_name = 'registration/password_reset_done.html'), name='password_reset_done'),
     re_path(r'^reset/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$',

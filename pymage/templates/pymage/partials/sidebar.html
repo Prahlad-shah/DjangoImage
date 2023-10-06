@@ -30,18 +30,18 @@
       </li>
       <!-- Nav Item - Home -->  
 
-      <!-- Nav Item - Grayscale -->
-      <li class="nav-item {{ indexActive }}">
-        <a class="nav-link" href="{% url 'pymage:grayscale' %}">
-          <i class="fas fa-fw fa-star-half-alt"></i>
-          <span>Grayscale</span></a>
-      </li>
-
       <!-- Nav Item - Seek -->
       <li class="nav-item {{ searchActive }}">
         <a class="nav-link" href="{% url 'pymage:search' %}">
           <i class="fas fa-fw fa-search"></i>
           <span>Image Search</span></a>
+      </li>
+
+      <!-- Nav Item - Grayscale -->
+      <li class="nav-item {{ indexActive }}">
+        <a class="nav-link" href="{% url 'pymage:grayscale' %}">
+          <i class="fas fa-fw fa-star-half-alt"></i>
+          <span>Grayscale</span></a>
       </li>
 
       {% comment %} <!-- Nav Item - Seek -->
@@ -50,7 +50,7 @@
           <i class="fas fa-fw fa-search"></i>
           <span>Seek</span></a>
       </li> {% endcomment %}
-
+      {% if user.is_staff %}
       <!-- Nav Item - Seek -->
       <li class="nav-item {{ performanceActive }}">
         <a class="nav-link" href="{% url 'pymage:seek' %}">
@@ -59,7 +59,7 @@
           </svg>
           <span>Performance</span></a>
       </li>
-
+      {% endif %}
       <!-- Nav Item - Rotate -->
       <li class="nav-item {{ rotateActive }}">
         <a class="nav-link" href="{% url 'pymage:rotate' %}">
