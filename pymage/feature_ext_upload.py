@@ -143,7 +143,14 @@ class ExtractFeatureUpload():
             accuracy = round(100.0 * correct_predictions /
                       (1.0 * correct_predictions + incorrect_predictions), 2)
             
-        return accuracy
+            precision = round(100.0 * correct_predictions /
+                      (1.0 * correct_predictions + (incorrect_predictions)), 2)
+            recall = round(100.0 * correct_predictions /
+                      (1.0 * correct_predictions + (incorrect_predictions)), 2)
+            f1score = round(100.0 * 2*correct_predictions /
+                      (2.0 * correct_predictions + (incorrect_predictions)), 2)
+            
+        return accuracy, precision, recall, f1score
 
 
         

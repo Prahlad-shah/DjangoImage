@@ -100,13 +100,18 @@ length_of_new_file = len(filenames_new)
 classList = query_image_obj.fileNamesOfData()
 # accuracy_of_whole_data = query_image_obj.calculate_accuracy()
 distance_info = query_image_obj.getDistanceInfo()
-def seekTest(request):
+def performanceResult(request):
 	seekActive = 'active'
 	pageTitle = 'Image Seeker'
 	pageStatus = 1
 	positif = ['rose', 'sunf', 'tuli', 'dand', 'aste']
 	actual = []
 	pred = []
+	datasetAccuracies = query_image_obj.calculate_accuracy() 
+	datasetAccuracy = datasetAccuracies[0]
+	precision = datasetAccuracies[1]
+	recall = datasetAccuracies[2]
+	f1score = datasetAccuracies[3]
 	if request.method == 'POST':
 		uploaded_file = request.FILES['imagefile']
 		pageStatus = 2
@@ -126,11 +131,11 @@ def seekTest(request):
 		for filepath in k_neighbours:
 			splitClassText = filepath.split('/')[-2]
 			splitClassName.append(splitClassText)
-          	
+    	
 		zipped_list = zip(k_neighbours, splitClassName)
 		
 
-		return render(request,'pymage/seek.html', {
+		return render(request,'pymage/performance.html', {
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
@@ -142,14 +147,18 @@ def seekTest(request):
 			# 'nearest':nearest,
 			# 'dataCounter':dataCounter,
 			# 'accuracy':accuracy,
-			# 'precision':precision,
-			# 'recall':recall,
-			# 'f1score':f1score
+			'precision':precision,
+			'recall':recall,
+			'f1score':f1score
 			})
-	return render(request, 'pymage/seek.html', {
+	return render(request, 'pymage/performance.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
 		'seekActive':seekActive,
+  		'datasetAccuracy': datasetAccuracy,
+    	'precision':precision,
+		'recall':recall,
+		'f1score':f1score,
 		'root_dir': root_dir,
 		'length_of_new_file': length_of_new_file,
 		'classList': classList,

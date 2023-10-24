@@ -14,7 +14,13 @@
           {% if user.is_authenticated %}
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
-            <span class="mr-1 d-none d-lg-inline text-gray-600 small my-3 font-weight-bold">{{user.first_name}} {{user.last_name}} </span>
+            <span class="mr-1 d-none d-lg-inline text-gray-600 small my-3 font-weight-bold">
+              {% if user.first_name %}
+              {{user.first_name}} {{user.last_name}}
+              {% else %}
+              {{user.username}}
+              {% endif %}
+             </span>
             <div class="dropdown mr-4 mt-2">
               <button type="button" class="btn btn-outline-primary btn-sm dropdown-toggle" data-bs-toggle="dropdown">
               </button>
@@ -27,7 +33,7 @@
               </ul>
             </div>
             <img class="rounded-circle shadow-4-strong mr-5" width="40px" height="40px" alt="avatar" src="{{relative_path_profile}}" />
-            <a class="btn btn-success py-2 mb-3" href="{% url 'accounts:logout'  %}">Logout</a>
+            <a class="btn btn-success py-2 mb-3" href="{% url 'accounts:logout'  %}"><strong>Logout</a></strong>
             {% else %}
             <!-- Topbar Navbar -->
             <ul class="navbar-nav ml-auto">
