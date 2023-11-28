@@ -1,0 +1,72 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Head -->
+  {% include 'pymage/partials/head.html' %}
+  <!-- End of Head -->
+
+  <body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      {% if user.is_authenticated %}
+        <!-- Sidebar -->
+        {% include 'pymage/partials/sidebar.html' %}
+        <!-- End of Sidebar -->
+      {% endif %}
+
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          {% include 'pymage/partials/topbar.html' %}
+          <!-- End of Topbar -->
+
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            
+            <div class="card text-center shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Searched Images:</h6>
+                </div>
+                <div class="card-columns">
+                {% for image in image_url  %}
+                  <div class="card">
+                    <img class="card-img-top" src="{{image}}" alt="Card image cap">
+                    <div class="card-body">
+                     <a href="https://www.google.com/search?q={{brand_names.1}}&" target="_blank"> <h5 class="card-title">{{brand_names.1}}</h5>
+                      <p class="card-text">
+                        To Know more about the brand owners and their success story follow the link.
+                      </p>
+                      </a>
+                      <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    </div>
+                  </div>
+                  {% empty %}
+                  <h2>NO Contents Found</h2>
+                {% endfor %}
+                </div>
+              </div>
+
+            {% comment %}end image container{% endcomment %}
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        {% include 'pymage/partials/footer.html' %}
+        <!-- End of Footer -->
+      </div>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button -->
+    <a class="scroll-to-top rounded" href="#page-top"><i class="fas fa-angle-up"></i></a>
+
+    <!-- Bootstrap & JavaScript Plugins -->
+    {% include 'pymage/partials/plugin.html' %}
+  </body>
+</html>

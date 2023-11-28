@@ -98,7 +98,6 @@ features_dir = str(settings.MEDIA_ROOT)+'/feature/*'
 filenames_new = sorted(query_image_obj.get_file_list())
 length_of_new_file = len(filenames_new)
 classList = query_image_obj.fileNamesOfData()
-# accuracy_of_whole_data = query_image_obj.calculate_accuracy()
 distance_info = query_image_obj.getDistanceInfo()
 def performanceResult(request):
 	seekActive = 'active'
@@ -162,7 +161,6 @@ def performanceResult(request):
 		'root_dir': root_dir,
 		'length_of_new_file': length_of_new_file,
 		'classList': classList,
-		# 'accuracy_of_whole_data': accuracy_of_whole_data,	
 		'distance_info': distance_info,
 		'filenames_new': filenames_new,
 		'relative_path_profile': relative_path_profile,
@@ -188,6 +186,7 @@ def rotate(request):
 			'pageTitle':pageTitle,
 			'rotateActive':rotateActive,
 			'image': img,
+			'relative_path_profile':relative_path_profile
 			})
 	if request.GET.get('degree'):
 		displayFile = request.GET['displayFromPallet']
@@ -230,7 +229,8 @@ def flip(request):
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'flipActive':flipActive
+			'flipActive':flipActive,
+			'relative_path_profile':relative_path_profile
 			})
 	if request.GET.get('leftright'):
 		displayFile = request.GET['displayFromPallet']
@@ -249,7 +249,8 @@ def flip(request):
 			'displayFileMod':displayFileMod,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'flipActive':flipActive
+			'flipActive':flipActive,
+			'relative_path_profile':relative_path_profile
 			})
 	if request.GET.get('topbottom'):
 		displayFile = request.GET['displayFromPallet']
@@ -268,12 +269,14 @@ def flip(request):
 			'displayFileMod':displayFileMod,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'flipActive':flipActive
+			'flipActive':flipActive,
+			'relative_path_profile':relative_path_profile,
 			})
 	return render(request, 'pymage/flip.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
-		'flipActive':flipActive
+		'flipActive':flipActive,
+		'relative_path_profile':relative_path_profile
 		})
 
 def crop(request):
@@ -291,7 +294,8 @@ def crop(request):
 			'displayFile':displayFile,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'cropActive':cropActive
+			'cropActive':cropActive,
+			'relative_path_profile':relative_path_profile
 			})
 	if request.GET.get('x'):
 		displayFile = request.GET['displayFromPallet']
@@ -310,12 +314,14 @@ def crop(request):
 			'displayFileMod':displayFileMod,
 			'pageStatus':pageStatus,
 			'pageTitle':pageTitle,
-			'cropActive':cropActive
+			'cropActive':cropActive,
+			'relative_path_profile':relative_path_profile
 			})
 	return render(request, 'pymage/crop.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,
-		'cropActive':cropActive
+		'cropActive':cropActive,
+		'relative_path_profile':relative_path_profile
 		})
 
 def scale(request):
@@ -393,7 +399,54 @@ def searchFlickrData(request):
                                                'featureAttr1': featureAttr[1], 'featureAttr2': featureAttr[2],
                                                'classNames': classNames, 'relative_path_profile': relative_path_profile,
                                                'searchActive':searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus} )
-
-
+from .essnt_methods import ConvertCSV
+def textualSearch(request):
+    searchActive = 'active'
+    pageTitle = 'Image Search'
+    pageStatus = 1
+    if request.method == 'POST':
+        pageStatus = 2
+        searched_data = str(request.POST.get('searchbox'))
+        image_url = ConvertCSV.searchURLImage(name=searched_data)
+        brand_names = ConvertCSV.searchBrandsName(name= searched_data)
+        if image_url and brand_names:
+            return render(request, 'pymage/textsearch.html', {'brand_names':brand_names, 'image_url':image_url, 'searchActive':searchActive,
+                                                               'pageTitle':pageTitle, 'pageStatus':pageStatus,
+                                                               'relative_path_profile':relative_path_profile})
+        else:
+            return render(request, 'pymage/textsearch.html', { })
+    else:
+        return render(request, 'pymage/textsearch.html', { 'searchActive':searchActive,
+                                                               'pageTitle':pageTitle, 'pageStatus':pageStatus,
+                                                               'relative_path_profile':relative_path_profile})
+    
+   
+def textbasedsearch(request):
+    textsearchActive = 'active'
+    pageTitle = 'Image Search'
+    pageStatus = 1
+    ifo_box = 'Search the Brand Images'
+    if request.method == 'POST':
+        pageStatus = 2
+        searched_data = str(request.POST.get('fullsearchbox'))
+        image_url = ConvertCSV.searchURLImage(name=searched_data)
+        brand_names = ConvertCSV.searchBrandsName(name= searched_data)
+        if image_url and brand_names:
+            return render(request, 'pymage/textbasedsearch.html', {'brand_names':brand_names, 'image_url':image_url, 'textsearchActive':textsearchActive,
+                                                               'pageTitle':pageTitle, 'pageStatus':pageStatus,
+                                                               'relative_path_profile':relative_path_profile})
+        else:
+            return render(request, 'pymage/textbasedsearch.html', { })
+    else:
+        return render(request, 'pymage/textbasedsearch.html', { 'ifo_box':ifo_box, 'textsearchActive':textsearchActive,
+                                                               'pageTitle':pageTitle, 'pageStatus':pageStatus,
+                                                               'relative_path_profile':relative_path_profile})
+   
+      
+            
+            
+        	
+         
+     
     
 	

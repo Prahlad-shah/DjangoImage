@@ -8,19 +8,19 @@
         <figure class="figure mx-3">
           <img src="{{ k_neighbours.0 }}" class="figure-img rounded float-left" width="280" height="210" alt="" />
           <figcaption class="figure-caption text-center">
-            <a href="brand_info.1">Image Source</a>
+            <a href="{{brand_info.1}}">Image Source</a>
           </figcaption>
         </figure>
         <figure class="figure mx-3">
           <img src="{{ k_neighbours.2 }}" class="figure-img rounded float-left" width="280" height="210" alt="" />
           <figcaption class="figure-caption text-center">
-            <a href="brand_info.1">Image Source</a>
+            <a href="{{brand_info.1}}">Image Source</a>
           </figcaption>
         </figure>
         <figure class="figure mx-3">
           <img src="{{ k_neighbours.4 }}" class="figure-img rounded float-left" width="280" height="210" alt="" />
           <figcaption class="figure-caption text-center">
-            <a href="brand_info.1">Image Source</a>
+            <a href="{{brand_info.1}}">Image Source</a>
           </figcaption>
         </figure>
         <p class="text-justify">{{ brand_info.0 }}</p>On the Grayscale Menu, you can do image manipulation in the form of convert color images to gray images. This can be done by changing each pixel in a 24-bit RGB image to an 8-bit Grayscale image.
@@ -28,3 +28,70 @@
     </div>
   </div>
   <!-- End Card Information -->
+
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Accuracy Informations:</h6>
+    </div>
+    <div class="card-body text-justify">
+      <p class="text"><h3>Euclidean distance</h3>
+        This measures the "straight line" distance between two points in a space. The closer the points are, the more similar they are considered. It's widely used in image recognition and when data can be naturally represented in 2D or 3D spaces. Though it's intuitive and easy to understand, a limitation of Euclidean distance is that In high-dimensional spaces, the concept of "distance" can become less intuitive. Also, all features are given equal importance, which might not always be desired.</p>
+       {% comment %} start progress  {% endcomment %}
+       <div class="col-lg-6">
+
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Searched Image</h6>
+          </div>
+          <div class="card-body">
+            <div style="padding: 20px;">
+              <center>
+                <img src="{{ k_neighbours.0 }}" alt="Searched Image" style="max-height: 100%; max-width: 100%">
+              </center>
+            </div>
+            
+            <div class="progress" style="height: 30px;">
+              <div class="progress-bar" role="progressbar" style="width: {{queried_accuracy}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{queried_accuracy}}%</div>
+            </div>
+            <div class="mt-2 mb-0 h-25 float-right">
+            <a style="height: 35px;" href="http://127.0.0.1:9000/{{ k_neighbours.0 }}" class="btn btn-success btn-icon-split mb-0 mt-2">
+              <span class="icon text-white-50">
+                <i class="fas fa-download"></i>
+              </span>
+              <span class="text">Download Image</span>
+            </a>
+          </div>
+          </div>
+        </div>
+
+      </div>
+      
+       {% comment %} end progress  {% endcomment %}
+  {% comment %} start column {% endcomment %}
+  <div class="col-xl-4 col-md-6 mb-4">
+    <div class="card border-left-success shadow h-100 py-2">
+      <div class="card-body">
+        <div class="row no-gutters align-items-center">
+          <div class="col mr-2">
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Similarity Ratio</div>
+            <div class="row no-gutters align-items-center">
+              <div class="col-auto">
+                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{queried_accuracy}}%</div>
+              </div>
+              <div class="col">
+                <div class="progress progress-sm mr-2">
+                  <div class="progress-bar bg-info" role="progressbar" style="width: {{queried_accuracy}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-auto">
+            <i class="fas fa-crosshairs fa-2x text-gray-300"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% comment %} End column {% endcomment %}
+   </div>
+  </div>

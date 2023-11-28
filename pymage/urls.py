@@ -16,7 +16,9 @@ urlpatterns = [
     path('scale', views.scale, name='scale'),
     path('invert', views.invert, name='invert'),
     path('search', views.searchFlickrData, name='search'),
-    # path('seektest', views.seekTest, name='test')
+    path('textbasedsearch', views.textbasedsearch, name='textbasedsearch'),
+    path('textsearch', views.textualSearch, name='textsearch'),
+    
 
 
 ]

@@ -3,7 +3,7 @@
 <html>
     <head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"></head>
     <body>
-        <div class="container">
+        {% comment %} <div class="container">
             <h1>Simple image search engine</h1>
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -24,6 +24,25 @@
             {% endfor %}
 
         </div>
-        <figurename>{{ score.1.name }}</figurename>
+        <figurename>{{ score.1.name }}</figurename> {% endcomment %}
+
+        <h1>Prahlad Shah</h1>
+        <h2>{{brand_names}}</h2>
+        <form action="" method="post" >
+            {% csrf_token %}
+            <label for="search">Search</label>
+            <input type="text" name="searchbox" required>
+            <input type="submit">
+        </form>
+
+        <h2> {{error_message}} </h2>
+        <a href="https://www.google.com/search?q={{brand_names.1}}&" target="_blank">For the brand Owners information </a>
+{% comment %} 
+        {% for image in image_url.0  %}
+        <img src="{{image}}" alt="">
+        {% endfor %} {% endcomment %}
+        
+        {% comment %} <h2> {{image_url}} </h2> {% endcomment %}
+
     </body>
 </html>

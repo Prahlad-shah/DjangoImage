@@ -24,7 +24,6 @@ class CompanyInfo():
         
         
     def brand_Info(self, queried_class_name):
-        
         if(queried_class_name[0] == 'HP'):
             brand_info = "HP Info"
             brand_link = "https://www.hp.com/us-en/home.html"

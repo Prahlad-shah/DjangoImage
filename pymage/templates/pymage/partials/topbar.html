@@ -14,6 +14,13 @@
           {% if user.is_authenticated %}
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
+
+            <form action="{% url 'pymage:textsearch' %}" method="post" class="form-inline mx-5" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" name="searchbox" required type="search" placeholder="Logo Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><strong>Search</strong></button>
+            </form>
+
             <span class="mr-1 d-none d-lg-inline text-gray-600 small my-3 font-weight-bold">
               {% if user.first_name %}
               {{user.first_name}} {{user.last_name}}

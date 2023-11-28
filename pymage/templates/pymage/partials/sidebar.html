@@ -37,6 +37,14 @@
             <i class="fas fa-fw fa-search"></i>
             <span>Image Search</span></a>
         </li>
+
+
+            <!-- Nav Item - Seek -->
+            <li class="nav-item {{ textsearchActive }}">
+              <a class="nav-link" href="{% url 'pymage:textbasedsearch' %}">
+                <i class="fas fa-fw fa-search"></i>
+                <span>Text Search</span></a>
+            </li>
   
         <!-- Nav Item - Grayscale -->
         <li class="nav-item {{ indexActive }}">
@@ -82,7 +90,7 @@
 
     {% comment %} For Super Users {% endcomment %}
     {% if user.is_staff %}
-    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <ul class="navbar-nav navbar-dark bg-dark sidebar sidebar-dark accordion" id="accordionSidebar">
     <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'pymage:home' %}">
         <div class="sidebar-brand-icon">
@@ -117,6 +125,13 @@
           <i class="fas fa-fw fa-search"></i>
           <span>Image Search</span></a>
       </li>
+
+            <!-- Nav Item - Seek -->
+            <li class="nav-item {{ searchActive }}">
+              <a class="nav-link" href="{% url 'pymage:textsearch' %}">
+                <i class="fas fa-fw fa-search"></i>
+                <span>Text Search</span></a>
+            </li>
 
       <!-- Nav Item - Grayscale -->
       <li class="nav-item {{ indexActive }}">

@@ -1,143 +1,55 @@
           <div class="row">
 
-            <div class="col-lg-6">
+            <div class="col-lg-4">
 
               <!-- Circle Buttons -->
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
+                <div class="card-header">
                   <h6 class="m-0 font-weight-bold text-primary">Original Image</h6>
                 </div>
                 <div class="card-body">
-                  <div style="padding: 20px;">
-                    <center>
+                  <div style="">
                       {% comment %} <img src="http://127.0.0.1{{ displayFile }}" alt="Original Image" style="max-height: 100%; max-width: 100%"> {% endcomment %}
-                      <img src="{{ uploaded_img_path }}" alt="Original Image" style="max-height: 100%; max-width: 100%">
-                       
-                    </center>
+                      <img class="card-img-top" src="{{ uploaded_img_path }}" alt="Original Image">
                   </div>
-                  <div class="my-2"></div>
-                  <a href="http://127.0.0.1:9000/{{ uploaded_img_path }}" class="btn btn-success btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-download"></i>
-                    </span>
-                    <span class="text">Download Image</span>
-                  </a>
                 </div>
               </div>
 
             </div>
-
-            <div class="col-lg-6">
-
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Searched Image</h6>
-                </div>
-                <div class="card-body">
-                  <div style="padding: 20px;">
-                    <center>
-                      <img src="{{ k_neighbours.0 }}" alt="Searched Image" style="max-height: 100%; max-width: 100%">
-                    </center>
+            <div class="col-lg-8">
+                {% comment %} start card body-2  {% endcomment %}
+                <div class="card shadow mb-4">
+                  <div class="card-body">
+                    <h5 class="card-title border border-top-0 border-left-0 border-right-0">Image Information</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Brand Foundation</h6>
+                    <p class="card-text text-justify">{{ brand_info.0 }}</p>
+                    <a href="{{brand_info.1}}" class="card-link">Brand Owner</a>
+                    <a href="#" class="card-link">Related Images</a>
                   </div>
-                  
-                  <div class="progress" style="height: 30px;">
-                    <div class="progress-bar" role="progressbar" style="width: {{queried_accuracy}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{queried_accuracy}}%</div>
-                  </div>
-                  <div class="mt-2 mb-0 h-25 float-right">
-                  <a style="height: 35px;" href="http://127.0.0.1:9000/{{ k_neighbours.0 }}" class="btn btn-success btn-icon-split mb-0 mt-2">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-download"></i>
-                    </span>
-                    <span class="text">Download Image</span>
-                  </a>
                 </div>
-                </div>
-              </div>
-
+                {% comment %} end card body-2 {% endcomment %}
             </div>
-            
           </div>
 
-          
-          {% comment %} <h2>Similar Images:</h2>
-          <div class="row">
-          {% for score in scores %}
-            <div class="col-lg-6 d-flex flex-row">
-              <!-- Circle Buttons -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">{{ score.0 }}</h6>
-                  <h6 class="m-0 font-weight-bold text-primary">{{ score.1.name }}</h6>
-                </div>
-                <div class="card-body">
-                  <div style="padding: 20px;">
-                    <center>
-                      <img src="http://127.0.0.1{{ displayFile }}" alt="Original Image" style="max-height: 100%; max-width: 100%"> 
-                      <img src="{{ score.1 }}" alt="Original Image" style="max-height: 100%; max-width: 100%">  
-                    </center>
-                  </div>
-                  <div class="my-2"></div>
-                  <a href="http://127.0.0.1:9000/{{ score.1 }}" class="btn btn-success btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-download"></i>
-                    </span>
-                    <span class="text">Download Image</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
-        </div>   {% endcomment %}
 
         <div class="card text-center shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Similar Images:</h6>
           </div>
-          <div class="card-body text-center">
-            {% for item1, item2 in zipped_list %}
-            <figure  class="border border-success" style="float: left; padding: 30px; margin-left: 30px; margin-right: 30px; margin-bottom: 30px;">
-              <img src="{{ item1 }}" height="200px" width="200px">
-              {% comment %} <figcaption> {{ score.1.name }}</figcaption><br> {% endcomment %}
-              <figcaption> {{ item2 }}</figcaption>
-            </figure>
-            {% endfor %}
-          </div>
-        </div>
-
-
-  <div class="card shadow mb-4">
-    <div class="card-header py-3">
-      <h6 class="m-0 font-weight-bold text-primary">Accuracy Informations:</h6>
-    </div>
-    <div class="card-body text-justify">
-      <p class="text"><h3>Euclidean distance</h3>
-        This measures the "straight line" distance between two points in a space. The closer the points are, the more similar they are considered. It's widely used in image recognition and when data can be naturally represented in 2D or 3D spaces. Though it's intuitive and easy to understand, a limitation of Euclidean distance is that In high-dimensional spaces, the concept of "distance" can become less intuitive. Also, all features are given equal importance, which might not always be desired.</p>
-       
-  {% comment %} start column {% endcomment %}
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-success shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Similarity Ratio</div>
-            <div class="row no-gutters align-items-center">
-              <div class="col-auto">
-                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{queried_accuracy}}%</div>
-              </div>
-              <div class="col">
-                <div class="progress progress-sm mr-2">
-                  <div class="progress-bar bg-info" role="progressbar" style="width: {{queried_accuracy}}%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
+          <div class="card-columns">
+          {% for item1, item2 in zipped_list  %}
+            <div class="card">
+              <img class="card-img-top" src="{{item1}}" alt="Card image cap">
+              <div class="card-body">
+               <a href="{{brand_info.1}}" target="_blank"> <h5 class="card-title">{{item2}}</h5>
+                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+               </a>
+                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>
             </div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-crosshairs fa-2x text-gray-300"></i>
+          {% endfor %}
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  {% comment %} End column {% endcomment %}
-   </div>
-  </div>
+
+
+  
