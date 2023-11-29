@@ -24,7 +24,7 @@
         <!-- Begin Page Content -->
         <div class="container-fluid bg-info">
           <div class="card bg-dark text-dark">
-            <img src="{% static 'pymage/img/login_background.jpg' %}" class="card-img" alt="login_background">
+            <img src="{% static 'pymage/img/loginbackground.jpg' %}" class="card-img" alt="login_background">
             <div class="card-img-overlay">
               <!-- Page Heading -->
               <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -34,11 +34,20 @@
               <div class="card text-center mx-auto mb-5" style="width: 20rem;">
                 <div class="card-body">
                   <h5 class="card-title font-weight-bold">LogoAnyz</h5>
-
-                  <h1>Login Now</h1>
+                  <div>{{ form.non_field_errors }}</div>
                   <form action="" method="post">
                     {% csrf_token %}
-                    <div class="font-weight-bold">{{ form.as_p }}</div>
+                    <div class="fieldWrapper">
+                      {{ form.username.errors }}
+                    <div class="font-weight-bold">{{ form.username.label }} </div>
+                    <div class="font-weight-bold">{{ form.username }} </div>
+                  </div>
+                  <br>
+                  <div class="fieldWrapper">
+                    {{ form.password.errors }}
+                    <div class="font-weight-bold">{{ form.password.label }} </div>
+                    <div class="font-weight-bold">{{ form.password }} </div>
+                  </div>
                     <br>
                     <input class="btn btn-primary w-100 font-weight-bold" type="submit" value="Login">
                   </form><br>

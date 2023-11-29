@@ -39,9 +39,8 @@ class UserSignUpView(SuccessMessageMixin, CreateView):
     pageStatus = 1
     pageTitle = 'Sign Up'
     userSignUPActive = 'active'
-    success_message = "Account was created successfully"
     extra_context={'pageTitle': pageTitle, 'pageStatus': pageStatus, 'homekActive': userSignUPActive,
-                   'success_message': success_message,}
+                   }
     
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "Please submit the form Correctly")
