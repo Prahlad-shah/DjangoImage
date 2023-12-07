@@ -1,6 +1,8 @@
 ./djangomage/media
 /djangomage/media/img/*
 /djangomage/media/uploads/*
+/media
 media/Flickr_32/
 media/feature/
 media/img/
+media/user_profiles
