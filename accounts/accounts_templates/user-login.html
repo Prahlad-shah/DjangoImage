@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,80 +7,67 @@
 {% include "pymage/partials/head.html" %}
 <!-- End of Head -->
 
-<body id="page-top">
-
-  <!-- Page Wrapper -->
-  <div id="wrapper">
-
-    <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
-
-      <!-- Main Content -->
-      <div id="content">
-
-        <!-- Topbar -->
-        {% include "pymage/partials/topbar.html" %}
-        <!-- End of Topbar -->
-
-        <!-- Begin Page Content -->
-        <div class="container-fluid bg-info">
-          <div class="card bg-dark text-dark">
-            <img src="{% static 'pymage/img/loginbackground.jpg' %}" class="card-img" alt="login_background">
-            <div class="card-img-overlay">
-              <!-- Page Heading -->
-              <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <div class="h3 mb-0 text-white">Login Page</div>
-              </div>
-
-              <div class="card text-center mx-auto mb-5" style="width: 20rem;">
-                <div class="card-body">
-                  <h5 class="card-title font-weight-bold">LogoAnyz</h5>
-                  <div>{{ form.non_field_errors }}</div>
-                  <form action="" method="post">
-                    {% csrf_token %}
-                    <div class="fieldWrapper">
-                      {{ form.username.errors }}
-                    <div class="font-weight-bold">{{ form.username.label }} </div>
-                    <div class="font-weight-bold">{{ form.username }} </div>
+<body id="page-top" class="bg-gradient-primary">
+          <!-- Outer Row -->
+          <div class="row justify-content-center mx-auto">
+  
+              <div class="col-xl-10 col-lg-12 col-md-9">
+  
+                  <div class="card o-hidden border-0 shadow-lg my-5">
+                      <div class="card-body p-0">
+                          <!-- Nested Row within Card Body -->
+                          <div class="row">
+                              <div class="col-lg-6 d-none d-lg-block" style="background-image: url('{% static 'pymage/img/login-image.jpeg' %}');
+                              background-position: center;
+                              background-size: cover;"></div>
+                              <div class="col-lg-6">
+                                  <div class="p-5">
+                                      <div class="text-center">
+                                          <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                          <div class="no-arrow">{{ form.non_field_errors }}</div>
+                                      </div>
+                                      <form class="user" action="" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                          <div class="form-group">
+                                            {% render_field form.username placeholder=form.username.label class+="form-control form-control-user" %}
+                                          </div>
+                                          <div class="form-group">
+                                            {% render_field form.password placeholder=form.password.label class+="form-control form-control-user" %}
+                                          </div>
+                                          <div class="form-group">
+                                              <div class="custom-control custom-checkbox small">
+                                                  <input type="checkbox" class="custom-control-input" id="customCheck">
+                                                  <label class="custom-control-label" for="customCheck">Remember
+                                                      Me</label>
+                                              </div>
+                                          </div>
+                                          <button type="submit" class="btn btn-primary btn-user btn-block">
+                                              Login
+                                          </button>
+                                          <hr>
+                                          <a href="index.html" class="btn btn-google btn-user btn-block">
+                                              <i class="fab fa-google fa-fw"></i> Login with Google
+                                          </a>
+                                          <a href="index.html" class="btn btn-facebook btn-user btn-block">
+                                              <i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
+                                          </a>
+                                      </form>
+                                      <hr>
+                                      <div class="text-center">
+                                          <a class="small" href="{% url 'accounts:reset_password'  %}">Forgot Password?</a>
+                                      </div>
+                                      <div class="text-center">
+                                          <a class="small" href="{% url 'accounts:signup'  %}">Create an Account!</a>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
                   </div>
-                  <br>
-                  <div class="fieldWrapper">
-                    {{ form.password.errors }}
-                    <div class="font-weight-bold">{{ form.password.label }} </div>
-                    <div class="font-weight-bold">{{ form.password }} </div>
-                  </div>
-                    <br>
-                    <input class="btn btn-primary w-100 font-weight-bold" type="submit" value="Login">
-                  </form><br>
-                  <a href="{% url 'accounts:reset_password'  %}"><button class="btn btn-primary w-100 font-weight-bold">Reset
-                      Password</button>
-                    </a><br><br>
-                   <p class="font-weight-bold">Don't Have an Account <a href="{% url 'accounts:signup'  %}">Sign Up</a></p>
-                  
-                </div>
+  
               </div>
-            </div>
+  
           </div>
-        </div>
-        <!-- /.container-fluid -->
-
-      </div>
-      <!-- End of Main Content -->
-
-      <!-- Footer -->
-      {% include "pymage/partials/footer.html" %}
-      <!-- End of Footer -->
-
-    </div>
-    <!-- End of Content Wrapper -->
-
-  </div>
-  <!-- End of Page Wrapper -->
-
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
 
 
   <!-- Bootstrap & JavaScript Plugins-->

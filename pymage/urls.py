@@ -18,8 +18,7 @@ urlpatterns = [
     path('search', views.searchFlickrData, name='search'),
     path('textbasedsearch', views.textbasedsearch, name='textbasedsearch'),
     path('textsearch', views.textualSearch, name='textsearch'),
-    
-
+    path('topcompany', views.topCompanyList, name = 'topcompany'),
 
 ]
 

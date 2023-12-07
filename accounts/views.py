@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.edit import FormMixin
 from django.views.generic import ListView, TemplateView, CreateView
-from .ac_form import UserSignUpForm, UserCreationForm
+from .ac_form import UserSignUpForm, UserCreationForm, CustomUserChangeForm
 
 
 relative_path_profile = 'https://mdbcdn.b-cdn.net/img/new/avatars/1.webp'
@@ -22,12 +23,14 @@ class AccountHomePageView(TemplateView):
     
 
 
-class UserLoginView(TemplateView):
-    template_name = 'home.html'
+class UserLoginView(TemplateView, FormMixin):
+    template_name = 'user-login.html'
     pageStatus = 1
     pageTitle = 'Login'
     loginActive = 'active'
-    extra_context={'pageTitle': pageTitle, 'pageStatus': pageStatus, 'loginkActive': loginActive }
+    extra_context={'pageTitle': pageTitle, 'pageStatus': pageStatus, 'loginkActive': loginActive,
+                   }
+    
 
 from django.utils.translation import gettext_lazy as _
 from braces.views import FormInvalidMessageMixin
@@ -76,9 +79,11 @@ def profilePicture(request):
         uploaded_img_path_url = Path(str(upload_dir) + '/' +datetime.now().isoformat().replace(":", ".") + "_" + image.name)
         img.save(uploaded_img_path_url)
         path = uploaded_img_path_url #FULL PATH
-        start = settings.BASE_DIR
+        start = settings.MEDIA_ROOT
         relative_path = os.path.relpath(path, start)
         relative_path_profile = '/' + relative_path
+        request.user.profileIMG = relative_path_profile
+        request.user.save()
         return render(request, 'home.html', {
 		'pageStatus':pageStatus,
 		'pageTitle':pageTitle,

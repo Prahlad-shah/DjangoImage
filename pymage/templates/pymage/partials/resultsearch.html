@@ -37,12 +37,13 @@
             <h6 class="m-0 font-weight-bold text-primary">Similar Images:</h6>
           </div>
           <div class="card-columns">
-          {% for item1, item2 in zipped_list  %}
+          {% for img, imgclass in zipped_list  %}
             <div class="card">
-              <img class="card-img-top" src="{{item1}}" alt="Card image cap">
+              <img class="card-img-top" src="{{img}}" alt="Card image cap">
               <div class="card-body">
-               <a href="{{brand_info.1}}" target="_blank"> <h5 class="card-title">{{item2}}</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+               <a href="https://www.google.com/search?q={{imgclass}}" target="_blank"> 
+                <h5 class="card-title">{{imgclass}}</h5>
+                To Know more about the brand owners and their success story follow the link.</p>
                </a>
                 <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
               </div>

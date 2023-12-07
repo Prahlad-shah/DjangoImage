@@ -1,7 +1,7 @@
 <html>
     <title>Test-Page</title>
     <body>
-        <h3> settingsBASE_DIR ==> {{settingsBASE_DIR}} </h3>
+        {% comment %} <h3> settingsBASE_DIR ==> {{settingsBASE_DIR}} </h3>
         <h3> url==> {{url}} </h3>
         <form action="" method="post" enctype="multipart/form-data">
             {% csrf_token %}
@@ -22,6 +22,12 @@
         <img src="{{relative_path}}" alt="uploadImage">
         <img src="{{displayFile}}" alt="uploadImage">
         <h2>GrayScale Image </h2>
-        <img src="{{displayFileMod}}" alt="Image-File">
+        <img src="{{displayFileMod}}" alt="Image-File"> {% endcomment %}
+        <h3>{{random_list}}</h3>
+        {% for img, brand in random_list %}
+            <img src="{{img}}" alt="not found">
+            <h3> {{brand}} </h3>
+        {% endfor %}
+
     </body>
 </html>

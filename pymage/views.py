@@ -340,7 +340,7 @@ def invert(request):
 		'invertActive':invertActive
 		})
 
-    
+from . essnt_methods import WebScraping
 from .feature_ext_upload import ExtractFeatureUpload
 query_image_obj = ExtractFeatureUpload()
 relfilenames = query_image_obj.fileNamesOfData()
@@ -378,11 +378,13 @@ def searchFlickrData(request):
         for filepath in k_neighbours:
             splitClassText = filepath.split('/')[-2]
             splitClassName.append(splitClassText)
-            
+             
         companyInfo_list = company_info_obj.Infolist(splitClassName)
         brand_info_link = company_info_obj.brand_Info(splitClassName)
         queried_accuracy = company_info_obj.queriedAccuracy(splitClassName)
-            
+        
+        exactURL = WebScraping.getBrandURL(splitClassName[1])
+        
         zipped_list = zip(k_neighbours, splitClassName)
         
         return render(request, 'pymage/imagesearch.html', 
@@ -390,7 +392,7 @@ def searchFlickrData(request):
                     'filenames': relfilenames, 'filenames_length': filenames_length, 'k_neighbours':k_neighbours,
                     'searchActive': searchActive, 'pageTitle': pageTitle, 'pageStatus': pageStatus, 'zipped_list':zipped_list, 
                     'brand_info': brand_info_link, 'relative_path_profile': relative_path_profile,
-                    'companyInfo_list': companyInfo_list, 'queried_accuracy': queried_accuracy,})
+                    'companyInfo_list': companyInfo_list, 'queried_accuracy': queried_accuracy, 'exactURL':exactURL,})
 
     else:
         return render(request, 'pymage/imagesearch.html',{'media_root': settings.MEDIA_ROOT,
@@ -441,8 +443,18 @@ def textbasedsearch(request):
         return render(request, 'pymage/textbasedsearch.html', { 'ifo_box':ifo_box, 'textsearchActive':textsearchActive,
                                                                'pageTitle':pageTitle, 'pageStatus':pageStatus,
                                                                'relative_path_profile':relative_path_profile})
-   
-      
+
+from .essnt_methods import EssentialMethodsClass, RandomValues
+def topCompanyList(request):
+    topcompanyActive = 'active'
+    pageTitle = 'Top Search'
+    pageStatus = 1
+    randObj = RandomValues()
+    data_list = randObj.readFile()
+    random_list = randObj.randomizeList(data_list)
+    zipList = zip(random_list[0], random_list[1])
+    return render(request, 'pymage/topcompany.html', {'random_list':zipList,'topcompanyActive':topcompanyActive,
+                                                               'pageTitle':pageTitle, 'pageStatus':pageStatus,})
             
             
         	
