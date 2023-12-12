@@ -139,7 +139,7 @@ BASE_DIR_PATH = Path(__file__).resolve().parent.parent
 # STATIC_ROOT = Path.joinpath(BASE_DIR_PATH, "static/")
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (Path.joinpath(BASE_DIR_PATH, 'static/'),)
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/user_profiles")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 MEDIA_URL = '/media/'
 
 EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"

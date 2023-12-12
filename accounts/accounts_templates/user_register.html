@@ -14,7 +14,7 @@
     <div class="card-body p-0">
       <!-- Nested Row within Card Body -->
       <div class="row">
-        <div class="col-lg-5 d-none d-lg-block" style="  background: url("{% url 'pymage/img/registration-image.jpg'  %}");
+        <div class="col-lg-5 d-none d-lg-block" style="  background-image: url(' {% static 'pymage/img/registration-image.jpg' %} ');
         background-position: center;
         background-size: cover;"></div>
         <div class="col-lg-7">
@@ -50,7 +50,7 @@
                   {% render_field form.password1 placeholder=form.password2.label class+="form-control form-control-user" %}
                 </div>
                 <div class="col-sm-6">
-                  {% render_field form.password2 placeholder=form.password2.label class+="form-control form-control-user" %}
+                  {% render_field form.password2 placeholder="Re-Enter The Password" class+="form-control form-control-user" %}
                 </div>
               </div>
               <button type="submit" class="btn btn-primary btn-user btn-block">
